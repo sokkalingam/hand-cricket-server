@@ -1,8 +1,12 @@
 package com.project.handcricket.services;
 
 import com.project.handcricket.helper.Helper;
+import com.project.handcricket.models.Game;
+import com.project.handcricket.models.Player;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -13,9 +17,31 @@ public class GameService {
     return new Random().nextBoolean();
   }
 
-  public String getGameId() {
-    return Helper.getRandomID(5);
+  private HashMap<String, Game> gameMap = new HashMap<>();
+  private Game game = new Game();
+
+  public String hostGame(Player player) {
+    Game game = setupGame();
+    game.setBatsman(player);
+    return game.getId();
   }
 
+  public boolean joinGame(String gameId, Player player) {
+    Game game = gameMap.get(gameId);
+    if (game == null) return false;
+    game.setBowler(player);
+    return true;
+  }
+
+  public Game setupGame() {
+    Game game = new Game();
+    game.setId(Helper.getRandomID(5));
+    gameMap.put(game.getId(), game);
+    return game;
+  }
+
+  public Map<String, Game> getActiveGames() {
+    return gameMap;
+  }
 
 }

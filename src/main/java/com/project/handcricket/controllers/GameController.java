@@ -9,8 +9,13 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class GameController {
@@ -21,15 +26,25 @@ public class GameController {
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
 
-  @RequestMapping("/getGameId")
-  public String getGameId() {
-    return gameService.getGameId();
+  @RequestMapping(value = "/hostGame", method = RequestMethod.POST)
+  public String getGameId(@RequestBody Player player) {
+    return gameService.hostGame(player);
+  }
+
+  @RequestMapping(value = "/joinGame/{gameId}", method = RequestMethod.POST)
+  public Boolean joinGame(@PathVariable String gameId, @RequestBody Player player) {
+    return this.gameService.joinGame(gameId, player);
   }
 
   @MessageMapping("/game/{gameId}/{playerId}")
   public void getPlayerUpdate(Player player, @DestinationVariable String gameId, @DestinationVariable String playerId) {
     simpMessagingTemplate.convertAndSend("/live-updates/"+gameId+"/"+playerId, "Hello User!, PlayerId: " + playerId + ", GameId: " + gameId);
     simpMessagingTemplate.convertAndSend("/live-updates/"+gameId, "Hello Gamer!, PlayerId: " + playerId + ", GameId: " + gameId);
+  }
+
+  @RequestMapping("/activeGames")
+  public Map<String, Game> getActiveGames() {
+    return gameService.getActiveGames();
   }
 
 }

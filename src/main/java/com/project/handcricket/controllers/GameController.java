@@ -32,14 +32,14 @@ public class GameController {
   }
 
   @RequestMapping(value = "/joinGame/{gameId}", method = RequestMethod.POST)
-  public Boolean joinGame(@PathVariable String gameId, @RequestBody Player player) {
+  public Game joinGame(@PathVariable String gameId, @RequestBody Player player) {
     return this.gameService.joinGame(gameId, player);
   }
 
   @MessageMapping("/game/{gameId}/{playerId}")
   public void getPlayerUpdate(Player player, @DestinationVariable String gameId, @DestinationVariable String playerId) {
-    simpMessagingTemplate.convertAndSend("/live-updates/"+gameId+"/"+playerId, "Hello User!, PlayerId: " + playerId + ", GameId: " + gameId);
-    simpMessagingTemplate.convertAndSend("/live-updates/"+gameId, "Hello Gamer!, PlayerId: " + playerId + ", GameId: " + gameId);
+    simpMessagingTemplate.convertAndSend("/game-updates/"+gameId+"/"+playerId, "Hello User!, PlayerId: " + playerId + ", GameId: " + gameId);
+    simpMessagingTemplate.convertAndSend("/game-updates/"+gameId, "Hello Gamer!, PlayerId: " + playerId + ", GameId: " + gameId);
   }
 
   @RequestMapping("/activeGames")

@@ -26,16 +26,17 @@ public class GameService {
     return game.getId();
   }
 
-  public boolean joinGame(String gameId, Player player) {
+  public Game joinGame(String gameId, Player player) {
     Game game = gameMap.get(gameId);
-    if (game == null) return false;
+    if (game == null) return null;
     game.setBowler(player);
-    return true;
+    return game;
   }
 
   public Game setupGame() {
     Game game = new Game();
-    game.setId(Helper.getRandomID(5));
+//    game.setId(Helper.getRandomID(5));
+    game.setId("ABCDE");
     gameMap.put(game.getId(), game);
     return game;
   }

@@ -13,6 +13,7 @@ public class Game {
   private Player bowler;
   private List<Player> battedList;
   private List<Player> bowledList;
+  private List<Update> updates;
 
   public String getId() {
     return id;
@@ -70,4 +71,11 @@ public class Game {
     this.bowledList = bowledList;
   }
 
+  public List<Update> getUpdates() {
+    return updates;
+  }
+
+  public void setUpdates(List<Update> updates) {
+    this.updates = updates;
+  }
 }

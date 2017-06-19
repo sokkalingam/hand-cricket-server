@@ -20,10 +20,10 @@ public class GameService {
   private HashMap<String, Game> gameMap = new HashMap<>();
   private Game game = new Game();
 
-  public String hostGame(Player player) {
+  public Game hostGame(Player player) {
     Game game = setupGame();
     game.setBatsman(player);
-    return game.getId();
+    return game;
   }
 
   public Game joinGame(String gameId, Player player) {
@@ -35,10 +35,13 @@ public class GameService {
 
   public Game setupGame() {
     Game game = new Game();
-//    game.setId(Helper.getRandomID(5));
-    game.setId("ABCDE");
+    game.setId(Helper.getRandomID(5));
     gameMap.put(game.getId(), game);
     return game;
+  }
+
+  public Game getGame(String gameId) {
+    return gameMap.get(gameId);
   }
 
   public Map<String, Game> getActiveGames() {

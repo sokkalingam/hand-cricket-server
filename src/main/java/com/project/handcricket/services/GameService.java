@@ -1,9 +1,12 @@
 package com.project.handcricket.services;
 
+import com.project.handcricket.enums.GameStatus;
+import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.helper.Helper;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.Player;
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +23,38 @@ public class GameService {
   @Value("${gameTimeOutInHours}")
   private String gameTimeoutHr;
 
+  @Autowired
+  private PlayerService playerService;
+
+  private HashMap<String, Game> gameMap = new HashMap<>();
+
   public boolean randomBoolean() {
     return new Random().nextBoolean();
   }
 
-  private HashMap<String, Game> gameMap = new HashMap<>();
+  public Game getGame(String gameId) {
+    return gameMap.get(gameId);
+  }
+
+  public Player getPlayer(Game game, String playerId) {
+    if (game.getBatsman().getId().equals(playerId))
+      return game.getBatsman();
+    if (game.getBowler().getId().equals(playerId))
+      return game.getBowler();
+    return null;
+  }
+
+  public Player getOtherPlayer(Game game, String playerId) {
+    if (!game.getBatsman().getId().equals(playerId))
+      return game.getBatsman();
+    if (!game.getBowler().getId().equals(playerId))
+      return game.getBowler();
+    return null;
+  }
+
+  public Game addGame() {
+    return setupGame();
+  }
 
   public Game hostGame(Player player) {
     Game game = setupGame();
@@ -37,6 +67,7 @@ public class GameService {
     if (game == null) return null;
     game.touch();
     game.setBowler(player);
+    game.setGameStatus(GameStatus.IN_PROGRESS);
     return game;
   }
 
@@ -56,10 +87,6 @@ public class GameService {
     return game;
   }
 
-  public Game getGame(String gameId) {
-    return gameMap.get(gameId);
-  }
-
   public Map<String, Game> getActiveGames() {
     Iterator<Game> iterator = gameMap.values().iterator();
     while(iterator.hasNext()) {
@@ -70,8 +97,56 @@ public class GameService {
     return gameMap;
   }
 
-  public Game addGame() {
-    return setupGame();
+  public void setLastDelivery(String gameId, String playerId, Integer input) {
+    Game game = getGame(gameId);
+    Player player = getPlayer(game, playerId);
+    player.setLastDelivery(input);
+  }
+
+  public void setGameStatus(Game game) {
+    Player batsman = game.getBatsman();
+    Player bowler = game.getBowler();
+
+    // Both not out, game in progress
+    if (batsman.isNotOut() && bowler.isNotOut()) {
+      game.setGameStatus(GameStatus.IN_PROGRESS);
+      return;
+    }
+
+    // bowler is out, batsman chasing
+    if (bowler.isOut() && batsman.isNotOut()) {
+      // batman wins
+      if (batsman.getRuns() >  bowler.getRuns()) {
+        batsman.setPlayerStatus(PlayerStatus.WON);
+        game.setGameStatus(GameStatus.GAME_OVER);
+      }
+    }
+
+    // both are out
+    if (batsman.isOut() && bowler.isOut()) {
+      // bowler wins
+      if (bowler.getRuns() > batsman.getRuns()) {
+        bowler.setPlayerStatus(PlayerStatus.WON);
+        game.setGameStatus(GameStatus.GAME_OVER);
+      }
+      // draw
+      if (bowler.getRuns() == batsman.getRuns()) {
+        game.setGameStatus(GameStatus.DRAW);
+      }
+    }
+  }
+
+  public void play(String gameId) {
+    Game game = getGame(gameId);
+    playerService.addBalls(game.getBatsman());
+    if (playerService.isSameDelivery(game)) {
+      playerService.setBatsmanOut(game);
+      playerService.reverseRoles(game);
+    } else {
+      playerService.addRuns(game);
+    }
+    setGameStatus(game);
+    playerService.clearLastDeliveries(game);
   }
 
 }

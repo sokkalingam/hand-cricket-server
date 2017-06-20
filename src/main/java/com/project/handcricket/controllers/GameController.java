@@ -41,6 +41,12 @@ public class GameController {
     simpMessagingTemplate.convertAndSend("/game/" + gameId, gameService.getGame(gameId));
   }
 
+  @MessageMapping("/game/{gameId}/{playerId}/play")
+  public void playInput(@DestinationVariable String gameId, @DestinationVariable String playerId,
+                        @RequestBody Integer input) {
+    simpMessagingTemplate.convertAndSend("/game/" + gameId + "/" + playerId, "");
+  }
+
   @RequestMapping("/activeGames")
   public Map<String, Game> getActiveGames() {
     return gameService.getActiveGames();

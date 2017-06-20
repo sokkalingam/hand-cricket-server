@@ -2,6 +2,7 @@ package com.project.handcricket.models;
 
 import com.project.handcricket.enums.GameStatus;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,11 +14,14 @@ public class Game {
   private GameStatus gameStatus;
   private Player batsman;
   private Player bowler;
-  private List<Player> battedList;
-  private List<Player> bowledList;
-  private List<Update> updates;
+  private List<Player> battedList = new ArrayList<>();
+  private List<Player> bowledList = new ArrayList<>();
+  private List<Update> updates = new ArrayList<>();
 
-  public Game() { this.touch(); }
+  public Game() {
+    this.touch();
+    this.gameStatus = GameStatus.NOT_STARTED;
+  }
 
   public String getId() {
     return id;
@@ -95,4 +99,27 @@ public class Game {
    * Set Last Updated to Now
    */
   public void touch() { this.lastUpdated = new Date(); }
+
+  public void addToBattedList(Player player) {
+    this.battedList.add(player);
+  }
+
+  public void addToBowledList(Player player) {
+    this.bowledList.add(player);
+  }
+
+  public boolean isBatted(Player player) {
+    return _isPlayerInList(battedList, player);
+  }
+
+  public boolean isBowled(Player player) {
+    return _isPlayerInList(bowledList, player);
+  }
+
+  private boolean _isPlayerInList(List<Player> players, Player player) {
+    for (Player item : players)
+      if (item.getId().equals(player.getId()))
+        return true;
+    return false;
+  }
 }

@@ -41,15 +41,12 @@ public class GameController {
     simpMessagingTemplate.convertAndSend("/game/" + gameId, gameService.getGame(gameId));
   }
 
-//  @MessageMapping("/game/{gameId}/{playerId}")
-//  public void getPlayerUpdate(Player player, @DestinationVariable String gameId, @DestinationVariable String playerId) {
-//    simpMessagingTemplate.convertAndSend("/game-updates/"+gameId+"/"+playerId, "Hello User!, PlayerId: " + playerId + ", GameId: " + gameId);
-//    simpMessagingTemplate.convertAndSend("/game-updates/"+gameId, "Hello Gamer!, PlayerId: " + playerId + ", GameId: " + gameId);
-//  }
-
   @RequestMapping("/activeGames")
   public Map<String, Game> getActiveGames() {
     return gameService.getActiveGames();
   }
+
+  @RequestMapping("/addGame")
+  public Game getGame() { return gameService.addGame(); }
 
 }

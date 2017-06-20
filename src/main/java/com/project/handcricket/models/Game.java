@@ -2,11 +2,13 @@ package com.project.handcricket.models;
 
 import com.project.handcricket.enums.GameStatus;
 
+import java.util.Date;
 import java.util.List;
 
 public class Game {
 
   private String id;
+  private Date lastUpdated;
   private Integer targetScore;
   private GameStatus gameStatus;
   private Player batsman;
@@ -14,6 +16,8 @@ public class Game {
   private List<Player> battedList;
   private List<Player> bowledList;
   private List<Update> updates;
+
+  public Game() { this.touch(); }
 
   public String getId() {
     return id;
@@ -78,4 +82,17 @@ public class Game {
   public void setUpdates(List<Update> updates) {
     this.updates = updates;
   }
+
+  public Date getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(Date lastUpdated) {
+    this.lastUpdated = lastUpdated;
+  }
+
+  /**
+   * Set Last Updated to Now
+   */
+  public void touch() { this.lastUpdated = new Date(); }
 }

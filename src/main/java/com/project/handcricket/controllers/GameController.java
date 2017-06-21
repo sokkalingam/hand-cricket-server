@@ -3,6 +3,7 @@ package com.project.handcricket.controllers;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.Player;
 import com.project.handcricket.services.GameService;
+import com.project.handcricket.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,6 +21,9 @@ public class GameController {
 
   @Autowired
   private GameService gameService;
+
+  @Autowired
+  private PlayerService playerService;
 
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
@@ -41,10 +45,19 @@ public class GameController {
     simpMessagingTemplate.convertAndSend("/game/" + gameId, gameService.getGame(gameId));
   }
 
-  @MessageMapping("/game/{gameId}/{playerId}/play")
-  public void playInput(@DestinationVariable String gameId, @DestinationVariable String playerId,
+  @MessageMapping("/play/{gameId}/{playerId}")
+  public void play(@DestinationVariable String gameId, @DestinationVariable String playerId,
                         @RequestBody Integer input) {
-    simpMessagingTemplate.convertAndSend("/game/" + gameId + "/" + playerId, "");
+
+    playerService.setLastDelivery(gameId, playerId, input);
+
+    if (playerService.bothPlayersPlayed(gameId)) {
+      gameService.play(gameId);
+      publishGame(gameId);
+    }
+    else
+      notifyOtherPlayerToPlay(gameId, playerId);
+
   }
 
   @RequestMapping("/activeGames")
@@ -54,5 +67,11 @@ public class GameController {
 
   @RequestMapping("/addGame")
   public Game getGame() { return gameService.addGame(); }
+
+  public void notifyOtherPlayerToPlay(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend(
+        "/note/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getPlayer(gameId, playerId).getName() + " has played, waiting for your input");
+  }
 
 }

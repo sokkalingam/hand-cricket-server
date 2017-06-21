@@ -97,12 +97,6 @@ public class GameService {
     return gameMap;
   }
 
-  public void setLastDelivery(String gameId, String playerId, Integer input) {
-    Game game = getGame(gameId);
-    Player player = getPlayer(game, playerId);
-    player.setLastDelivery(input);
-  }
-
   public void setGameStatus(Game game) {
     Player batsman = game.getBatsman();
     Player bowler = game.getBowler();
@@ -130,23 +124,26 @@ public class GameService {
         game.setGameStatus(GameStatus.GAME_OVER);
       }
       // draw
-      if (bowler.getRuns() == batsman.getRuns()) {
+      if (bowler.getRuns().equals(batsman.getRuns())) {
         game.setGameStatus(GameStatus.DRAW);
       }
     }
   }
 
-  public void play(String gameId) {
+  public Game play(String gameId) {
     Game game = getGame(gameId);
     playerService.addBalls(game.getBatsman());
     if (playerService.isSameDelivery(game)) {
+      // OUT
       playerService.setBatsmanOut(game);
       playerService.reverseRoles(game);
     } else {
+      // NOT OUT
       playerService.addRuns(game);
     }
     setGameStatus(game);
     playerService.clearLastDeliveries(game);
+    return game;
   }
 
 }

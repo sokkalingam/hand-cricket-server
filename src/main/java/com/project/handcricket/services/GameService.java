@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -111,7 +109,8 @@ public class GameService {
     if (bowler.isOut() && batsman.isNotOut()) {
       // batman wins
       if (batsman.getRuns() >  bowler.getRuns()) {
-        batsman.setPlayerStatus(PlayerStatus.WON);
+        batsman.setStatus(PlayerStatus.Won);
+        bowler.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
       }
     }
@@ -120,11 +119,14 @@ public class GameService {
     if (batsman.isOut() && bowler.isOut()) {
       // bowler wins
       if (bowler.getRuns() > batsman.getRuns()) {
-        bowler.setPlayerStatus(PlayerStatus.WON);
+        bowler.setStatus(PlayerStatus.Won);
+        bowler.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
       }
       // draw
       if (bowler.getRuns().equals(batsman.getRuns())) {
+        bowler.setStatus(PlayerStatus.Draw);
+        bowler.setStatus(PlayerStatus.Draw);
         game.setGameStatus(GameStatus.DRAW);
       }
     }

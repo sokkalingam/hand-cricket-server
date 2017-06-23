@@ -18,7 +18,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
-    config.enableSimpleBroker("/game", "/chat");
+    config.enableSimpleBroker("/game", "/chat", "/play", "/notice");
     config.setApplicationDestinationPrefixes("/app");
   }
 

@@ -70,7 +70,7 @@ public class GameController {
 
   public void notifyOtherPlayerToPlay(String gameId, String playerId) {
     simpMessagingTemplate.convertAndSend(
-        "/note/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        "/notice/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
         playerService.getPlayer(gameId, playerId).getName() + " has played, waiting for your input");
   }
 

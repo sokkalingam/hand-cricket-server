@@ -3,8 +3,6 @@ package com.project.handcricket.models;
 import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.enums.PlayerType;
 
-import java.util.UUID;
-
 public class Player {
 
   private String id;
@@ -12,8 +10,8 @@ public class Player {
   private Integer runs;
   private Integer balls;
   private Integer lastDelivery;
-  private PlayerStatus playerStatus;
-  private PlayerType playerType;
+  private PlayerStatus status;
+  private PlayerType type;
 
   public String getId() {
     return id;
@@ -30,7 +28,7 @@ public class Player {
   }
 
   public Integer getRuns() {
-    return runs;
+    return runs != null ? runs : 0;
   }
 
   public void setRuns(Integer runs) {
@@ -38,7 +36,7 @@ public class Player {
   }
 
   public Integer getBalls() {
-    return balls;
+    return balls != null ? balls : 0;
   }
 
   public void setBalls(Integer balls) {
@@ -53,28 +51,28 @@ public class Player {
     this.lastDelivery = lastDelivery;
   }
 
-  public PlayerStatus getPlayerStatus() {
-    return playerStatus;
+  public PlayerStatus getStatus() {
+    return status;
   }
 
-  public void setPlayerStatus(PlayerStatus playerStatus) {
-    this.playerStatus = playerStatus;
+  public void setStatus(PlayerStatus status) {
+    this.status = status;
   }
 
-  public PlayerType getPlayerType() {
-    return playerType;
+  public PlayerType getType() {
+    return type;
   }
 
-  public void setPlayerType(PlayerType playerType) {
-    this.playerType = playerType;
+  public void setType(PlayerType type) {
+    this.type = type;
   }
 
   public boolean isOut() {
-    return playerStatus == PlayerStatus.OUT;
+    return status == PlayerStatus.Out;
   }
 
   public boolean isNotOut() {
-    return playerStatus == PlayerStatus.NOT_OUT;
+    return status == PlayerStatus.NotOut;
   }
 
 }

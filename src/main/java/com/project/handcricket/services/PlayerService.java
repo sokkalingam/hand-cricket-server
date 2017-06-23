@@ -112,7 +112,7 @@ public class PlayerService {
    * @param game
    */
   public void setBatsmanOut(Game game) {
-    game.getBatsman().setPlayerStatus(PlayerStatus.OUT);
+    game.getBatsman().setStatus(PlayerStatus.Out);
   }
 
   /**
@@ -122,7 +122,7 @@ public class PlayerService {
    * @param game
    */
   public void reverseRoles(Game game) {
-    if (game.getBowler().getPlayerStatus() == PlayerStatus.OUT) return;
+    if (game.getBowler().getStatus() == PlayerStatus.Out) return;
     Player temp = game.getBatsman();
     game.setBatsman(game.getBowler());
     game.setBowler(temp);

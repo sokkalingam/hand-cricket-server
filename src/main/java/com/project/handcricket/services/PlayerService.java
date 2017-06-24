@@ -48,10 +48,10 @@ public class PlayerService {
    * @param playerId
    * @param input
    */
-  public void setLastDelivery(String gameId, String playerId, Integer input) {
+  public void setInput(String gameId, String playerId, Integer input) {
     Player player = getPlayer(gameId, playerId);
-    if (player.getLastDelivery() == null)
-      player.setLastDelivery(input);
+    if (player.getInput() == null)
+      player.setInput(input);
   }
 
   /**
@@ -59,17 +59,19 @@ public class PlayerService {
    * @param game
    * @return
    */
-  public boolean isSameDelivery(Game game) {
-    return game.getBatsman().getLastDelivery().equals(game.getBowler().getLastDelivery());
+  public boolean isSameInput(Game game) {
+    return game.getBatsman().getInput().equals(game.getBowler().getInput());
   }
 
   /**
    * Set last deliveries to null
    * @param game
    */
-  public void clearLastDeliveries(Game game) {
-    game.getBatsman().setLastDelivery(null);
-    game.getBowler().setLastDelivery(null);
+  public void clearInputs(Game game) {
+    game.getBatsman().setLastDelivery(game.getBatsman().getInput());
+    game.getBowler().setLastDelivery(game.getBowler().getInput());
+    game.getBatsman().setInput(null);
+    game.getBowler().setInput(null);
   }
 
   /**
@@ -79,8 +81,8 @@ public class PlayerService {
    */
   public boolean bothPlayersPlayed(String gameId) {
     Game game = gameService.getGame(gameId);
-    return game.getBatsman().getLastDelivery() != null
-        && game.getBowler().getLastDelivery() != null;
+    return game.getBatsman().getInput() != null
+        && game.getBowler().getInput() != null;
   }
 
   /**
@@ -91,10 +93,10 @@ public class PlayerService {
     Player batsman = game.getBatsman();
     Player bowler = game.getBowler();
 
-    if (batsman.getLastDelivery() != 0) {
-      batsman.setRuns(batsman.getRuns() + batsman.getLastDelivery());
+    if (batsman.getInput() != 0) {
+      batsman.setRuns(batsman.getRuns() + batsman.getInput());
     } else {
-      batsman.setRuns(batsman.getRuns() + bowler.getLastDelivery());
+      batsman.setRuns(batsman.getRuns() + bowler.getInput());
     }
   }
 
@@ -128,4 +130,13 @@ public class PlayerService {
     game.setBowler(temp);
   }
 
+  public String getMessageForCurrentPlayer(String gameId, String playerId) {
+    Player otherPlayer = getOtherPlayer(gameId, playerId);
+    return "You have played, waiting for " + otherPlayer.getName() + " to play";
+  }
+
+  public String getMessageForOtherPlayer(String gameId, String playerId) {
+    Player currentPlayer = getPlayer(gameId, playerId);
+    return currentPlayer.getName() + " has played, waiting for you to play";
+  }
 }

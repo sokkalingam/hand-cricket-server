@@ -28,12 +28,12 @@ public class GameController {
   @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
 
-  @RequestMapping(value = "/hostGame", method = RequestMethod.POST)
+  @RequestMapping(value = "/game/hostGame", method = RequestMethod.POST)
   public String getGameId(@RequestBody Player player) {
     return gameService.hostGame(player).getId();
   }
 
-  @RequestMapping(value = "/joinGame/{gameId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/game/joinGame/{gameId}", method = RequestMethod.POST)
   public Game joinGame(@PathVariable String gameId, @RequestBody Player player) {
     Game game = gameService.joinGame(gameId, player);
     publishGame(gameId);
@@ -45,33 +45,68 @@ public class GameController {
     simpMessagingTemplate.convertAndSend("/game/" + gameId, gameService.getGame(gameId));
   }
 
-  @MessageMapping("/play/{gameId}/{playerId}")
+  @MessageMapping("/game/play/{gameId}/{playerId}")
   public void play(@DestinationVariable String gameId, @DestinationVariable String playerId,
                         @RequestBody Integer input) {
 
-    playerService.setLastDelivery(gameId, playerId, input);
+    playerService.setInput(gameId, playerId, input);
 
     if (playerService.bothPlayersPlayed(gameId)) {
       gameService.play(gameId);
       publishGame(gameId);
+      unpauseOtherPlayers(gameId, playerId);
+      notifyResult(gameId, playerId);
     }
     else
-      notifyOtherPlayerToPlay(gameId, playerId);
+      waitForPlay(gameId, playerId);
 
   }
 
-  @RequestMapping("/activeGames")
+  @RequestMapping("/game/activeGames")
   public Map<String, Game> getActiveGames() {
     return gameService.getActiveGames();
   }
 
-  @RequestMapping("/addGame")
+  @RequestMapping("/game/addGame")
   public Game getGame() { return gameService.addGame(); }
 
-  public void notifyOtherPlayerToPlay(String gameId, String playerId) {
+  public void waitForPlay(String gameId, String playerId) {
+    pauseCurrentPlayer(gameId, playerId);
+    notifyCurrentPlayer(gameId, playerId);
+    notifyOtherPlayer(gameId, playerId);
+  }
+
+  public void pauseCurrentPlayer(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/player/wait/" + gameId + "/" + playerId, true);
+  }
+
+  public void unpauseOtherPlayers(String gameId, String playerId) {
     simpMessagingTemplate.convertAndSend(
-        "/notice/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
-        playerService.getPlayer(gameId, playerId).getName() + " has played, waiting for your input");
+        "/game/player/wait/" + gameId + "/" + playerService.getPlayer(gameId, playerId).getId(),
+        false);
+    simpMessagingTemplate.convertAndSend(
+        "/game/player/wait/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        false);
+  }
+
+  public void notifyCurrentPlayer(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + playerId,
+        playerService.getMessageForCurrentPlayer(gameId, playerId));
+  }
+
+  public void notifyOtherPlayer(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend(
+        "/game/player/notify/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getMessageForOtherPlayer(gameId, playerId));
+  }
+
+  public void notifyResult(String gameId, String playerId) {
+    Player currentPlayer = playerService.getPlayer(gameId, playerId);
+    Player otherPlayer = playerService.getOtherPlayer(gameId, playerId);
+    simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + playerId,
+        "You played " + currentPlayer.getLastDelivery() + ", " + otherPlayer.getName() + " played " + otherPlayer.getLastDelivery());
+    simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + otherPlayer.getId(),
+        "You played " + otherPlayer.getLastDelivery() + ", " + currentPlayer.getName() + " played " + currentPlayer.getLastDelivery());
   }
 
 }

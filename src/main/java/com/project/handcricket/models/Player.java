@@ -10,6 +10,7 @@ public class Player {
   private Integer runs;
   private Integer balls;
   private Integer lastDelivery;
+  private Integer input;
   private PlayerStatus status;
   private PlayerType type;
 
@@ -75,4 +76,11 @@ public class Player {
     return status == PlayerStatus.NotOut;
   }
 
+  public Integer getInput() {
+    return input;
+  }
+
+  public void setInput(Integer input) {
+    this.input = input;
+  }
 }

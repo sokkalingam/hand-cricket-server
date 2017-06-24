@@ -5,7 +5,6 @@ public enum PlayerStatus {
   Out,
   NotOut,
   Won,
-  Lost,
-  Draw
+  Lost
 
 }

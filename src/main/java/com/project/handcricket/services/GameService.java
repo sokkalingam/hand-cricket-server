@@ -120,13 +120,11 @@ public class GameService {
       // bowler wins
       if (bowler.getRuns() > batsman.getRuns()) {
         bowler.setStatus(PlayerStatus.Won);
-        bowler.setStatus(PlayerStatus.Lost);
+        batsman.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
       }
       // draw
       if (bowler.getRuns().equals(batsman.getRuns())) {
-        bowler.setStatus(PlayerStatus.Draw);
-        bowler.setStatus(PlayerStatus.Draw);
         game.setGameStatus(GameStatus.DRAW);
       }
     }
@@ -135,7 +133,7 @@ public class GameService {
   public Game play(String gameId) {
     Game game = getGame(gameId);
     playerService.addBalls(game.getBatsman());
-    if (playerService.isSameDelivery(game)) {
+    if (playerService.isSameInput(game)) {
       // OUT
       playerService.setBatsmanOut(game);
       playerService.reverseRoles(game);
@@ -144,7 +142,7 @@ public class GameService {
       playerService.addRuns(game);
     }
     setGameStatus(game);
-    playerService.clearLastDeliveries(game);
+    playerService.clearInputs(game);
     return game;
   }
 

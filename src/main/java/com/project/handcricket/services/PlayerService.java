@@ -131,12 +131,27 @@ public class PlayerService {
   }
 
   public String getMessageForCurrentPlayer(String gameId, String playerId) {
-    Player otherPlayer = getOtherPlayer(gameId, playerId);
-    return "You have played, waiting for " + otherPlayer.getName() + " to play";
+    return "You have played " + getPlayer(gameId, playerId).getInput() +
+        ", waiting for " + getOtherPlayer(gameId, playerId).getName() + " to play";
   }
 
   public String getMessageForOtherPlayer(String gameId, String playerId) {
+    return getPlayer(gameId, playerId).getName() + " has played, waiting for you to play";
+  }
+
+  public String getResultForPlayer(String gameId, String playerId) {
+    return "You played " + getPlayer(gameId, playerId).getLastDelivery() +
+        ", " + getOtherPlayer(gameId, playerId).getName() + " played " +
+        getOtherPlayer(gameId, playerId).getLastDelivery();
+  }
+
+  public String getHighlightMessage(String gameId, String playerId) {
     Player currentPlayer = getPlayer(gameId, playerId);
-    return currentPlayer.getName() + " has played, waiting for you to play";
+    Player otherPlayer = getOtherPlayer(gameId, playerId);
+    Game game = gameService.getGame(gameId);
+    if (currentPlayer.getId().equals(game.getBatsman().getId()))
+      return "You got out!";
+    else
+      return otherPlayer.getName() + " got out!";
   }
 }

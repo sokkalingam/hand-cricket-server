@@ -50,12 +50,13 @@ public class GameController {
                         @RequestBody Integer input) {
 
     playerService.setInput(gameId, playerId, input);
-
     if (playerService.bothPlayersPlayed(gameId)) {
+      if (playerService.isSameInput(gameService.getGame(gameId)))
+        notifyHighlights(gameId, playerId);
       gameService.play(gameId);
       publishGame(gameId);
-      unpauseOtherPlayers(gameId, playerId);
       notifyResult(gameId, playerId);
+      unpauseOtherPlayers(gameId, playerId);
     }
     else
       waitForPlay(gameId, playerId);
@@ -101,12 +102,17 @@ public class GameController {
   }
 
   public void notifyResult(String gameId, String playerId) {
-    Player currentPlayer = playerService.getPlayer(gameId, playerId);
-    Player otherPlayer = playerService.getOtherPlayer(gameId, playerId);
     simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + playerId,
-        "You played " + currentPlayer.getLastDelivery() + ", " + otherPlayer.getName() + " played " + otherPlayer.getLastDelivery());
-    simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + otherPlayer.getId(),
-        "You played " + otherPlayer.getLastDelivery() + ", " + currentPlayer.getName() + " played " + currentPlayer.getLastDelivery());
+        playerService.getResultForPlayer(gameId, playerId));
+    simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getResultForPlayer(gameId, playerService.getOtherPlayer(gameId, playerId).getId()));
+  }
+
+  public void notifyHighlights(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + playerId,
+        playerService.getHighlightMessage(gameId, playerId));
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getHighlightMessage(gameId, playerService.getOtherPlayer(gameId, playerId).getId()));
   }
 
 }

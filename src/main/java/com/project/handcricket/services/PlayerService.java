@@ -150,7 +150,7 @@ public class PlayerService {
     Player otherPlayer = getOtherPlayer(gameId, playerId);
     Game game = gameService.getGame(gameId);
     if (currentPlayer.getId().equals(game.getBatsman().getId()))
-      return "You got out!";
+      return "You got OUT";
     else
       return otherPlayer.getName() + " got OUT";
   }

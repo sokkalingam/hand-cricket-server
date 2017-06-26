@@ -100,7 +100,7 @@ public class GameController {
 
   public void notifyGameRestart(String gameId) {
     Game game = gameService.getGame(gameId);
-    String message = "Game has been restarted!";
+    String message = "Game has been Restarted";
     simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + game.getBatsman().getId(),
         message);
     simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + game.getBowler().getId(),

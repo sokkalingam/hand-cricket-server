@@ -40,6 +40,22 @@ public class GameController {
     return game;
   }
 
+
+  @RequestMapping("/game/activeGames")
+  public Map<String, Game> getActiveGames() {
+    return gameService.getActiveGames();
+  }
+
+  @RequestMapping("/game/addGame")
+  public Game getGame() { return gameService.addGame(); }
+
+  @RequestMapping("/game/{gameId}/restart")
+  public String restartGame(@PathVariable String gameId) {
+    publishGame(gameService.restartGame(gameId).getId());
+    notifyGameRestart(gameId);
+    return "Game Restarted!";
+  }
+
   @MessageMapping("/game/{gameId}")
   public void publishGame(@DestinationVariable String gameId) {
     simpMessagingTemplate.convertAndSend("/game/" + gameId, gameService.getGame(gameId));
@@ -63,14 +79,6 @@ public class GameController {
 
   }
 
-  @RequestMapping("/game/activeGames")
-  public Map<String, Game> getActiveGames() {
-    return gameService.getActiveGames();
-  }
-
-  @RequestMapping("/game/addGame")
-  public Game getGame() { return gameService.addGame(); }
-
   public void waitForPlay(String gameId, String playerId) {
     pauseCurrentPlayer(gameId, playerId);
     notifyCurrentPlayer(gameId, playerId);
@@ -88,6 +96,15 @@ public class GameController {
     simpMessagingTemplate.convertAndSend(
         "/game/player/wait/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
         false);
+  }
+
+  public void notifyGameRestart(String gameId) {
+    Game game = gameService.getGame(gameId);
+    String message = "Game has been restarted!";
+    simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + game.getBatsman().getId(),
+        message);
+    simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + game.getBowler().getId(),
+        message);
   }
 
   public void notifyCurrentPlayer(String gameId, String playerId) {

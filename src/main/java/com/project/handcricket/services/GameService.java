@@ -146,4 +146,12 @@ public class GameService {
     return game;
   }
 
+  public Game restartGame(String gameId) {
+    Game game = getGame(gameId);
+    game.setGameStatus(GameStatus.IN_PROGRESS);
+    playerService.resetPlayer(game.getBatsman());
+    playerService.resetPlayer(game.getBowler());
+    return game;
+  }
+
 }

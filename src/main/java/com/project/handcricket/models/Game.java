@@ -14,9 +14,6 @@ public class Game {
   private GameStatus gameStatus;
   private Player batsman;
   private Player bowler;
-  private List<Player> battedList = new ArrayList<>();
-  private List<Player> bowledList = new ArrayList<>();
-  private List<Update> updates = new ArrayList<>();
 
   public Game() {
     this.touch();
@@ -44,6 +41,7 @@ public class Game {
   }
 
   public void setGameStatus(GameStatus gameStatus) {
+    this.touch();
     this.gameStatus = gameStatus;
   }
 
@@ -52,6 +50,7 @@ public class Game {
   }
 
   public void setBatsman(Player batsman) {
+    this.touch();
     this.batsman = batsman;
   }
 
@@ -60,31 +59,8 @@ public class Game {
   }
 
   public void setBowler(Player bowler) {
+    this.touch();
     this.bowler = bowler;
-  }
-
-  public List<Player> getBattedList() {
-    return battedList;
-  }
-
-  public void setBattedList(List<Player> battedList) {
-    this.battedList = battedList;
-  }
-
-  public List<Player> getBowledList() {
-    return bowledList;
-  }
-
-  public void setBowledList(List<Player> bowledList) {
-    this.bowledList = bowledList;
-  }
-
-  public List<Update> getUpdates() {
-    return updates;
-  }
-
-  public void setUpdates(List<Update> updates) {
-    this.updates = updates;
   }
 
   public Date getLastUpdated() {
@@ -100,26 +76,4 @@ public class Game {
    */
   public void touch() { this.lastUpdated = new Date(); }
 
-  public void addToBattedList(Player player) {
-    this.battedList.add(player);
-  }
-
-  public void addToBowledList(Player player) {
-    this.bowledList.add(player);
-  }
-
-  public boolean isBatted(Player player) {
-    return _isPlayerInList(battedList, player);
-  }
-
-  public boolean isBowled(Player player) {
-    return _isPlayerInList(bowledList, player);
-  }
-
-  private boolean _isPlayerInList(List<Player> players, Player player) {
-    for (Player item : players)
-      if (item.getId().equals(player.getId()))
-        return true;
-    return false;
-  }
 }

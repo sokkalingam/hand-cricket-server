@@ -152,6 +152,14 @@ public class PlayerService {
     if (currentPlayer.getId().equals(game.getBatsman().getId()))
       return "You got out!";
     else
-      return otherPlayer.getName() + " got out!";
+      return otherPlayer.getName() + " got OUT";
+  }
+
+  public void resetPlayer(Player player) {
+    player.setStatus(PlayerStatus.NotOut);
+    player.setInput(null);
+    player.setLastDelivery(null);
+    player.setBalls(null);
+    player.setRuns(null);
   }
 }

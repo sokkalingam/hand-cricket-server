@@ -69,4 +69,12 @@ public class Player {
     this.playerType = playerType;
   }
 
+  public boolean isOut() {
+    return playerStatus == PlayerStatus.OUT;
+  }
+
+  public boolean isNotOut() {
+    return playerStatus == PlayerStatus.NOT_OUT;
+  }
+
 }

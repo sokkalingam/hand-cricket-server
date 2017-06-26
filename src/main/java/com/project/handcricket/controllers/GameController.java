@@ -105,6 +105,8 @@ public class GameController {
         message);
     simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + game.getBowler().getId(),
         message);
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + game.getBatsman().getId(), "");
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + game.getBowler().getId(), "");
   }
 
   public void notifyCurrentPlayer(String gameId, String playerId) {

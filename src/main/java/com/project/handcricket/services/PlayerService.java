@@ -3,6 +3,7 @@ package com.project.handcricket.services;
 import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.Player;
+import org.apache.tomcat.jni.Socket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,9 @@ public class PlayerService {
 
   @Autowired
   private GameService gameService;
+
+  @Autowired
+  private SocketService socketService;
 
   /**
    * Get Player

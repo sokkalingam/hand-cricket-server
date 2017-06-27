@@ -35,8 +35,12 @@ public class GameController {
 
   @RequestMapping(value = "/game/joinGame/{gameId}", method = RequestMethod.POST)
   public Game joinGame(@PathVariable String gameId, @RequestBody Player player) {
+    if (gameId == null)
+      return null;
+    gameId = gameId.toUpperCase();
     Game game = gameService.joinGame(gameId, player);
-    publishGame(gameId);
+    if (game != null)
+      publishGame(gameId);
     return game;
   }
 

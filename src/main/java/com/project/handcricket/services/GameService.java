@@ -61,7 +61,7 @@ public class GameService {
   }
 
   public Game joinGame(String gameId, Player player) {
-    Game game = gameMap.get(gameId.toUpperCase());
+    Game game = gameMap.get(gameId);
     if (game == null) return null;
     if (game.getBowler() != null) return null;
     game.touch();

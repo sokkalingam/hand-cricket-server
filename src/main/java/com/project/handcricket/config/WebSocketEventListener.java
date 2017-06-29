@@ -1,6 +1,6 @@
 package com.project.handcricket.config;
 
-import com.project.handcricket.services.SocketService;
+import com.project.handcricket.socket.SocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;

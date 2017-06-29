@@ -1,4 +1,4 @@
-package com.project.handcricket.services;
+package com.project.handcricket.chat;
 
 import com.project.handcricket.models.Message;
 import org.springframework.stereotype.Service;

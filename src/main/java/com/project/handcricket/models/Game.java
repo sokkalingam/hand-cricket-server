@@ -1,6 +1,7 @@
 package com.project.handcricket.models;
 
 import com.project.handcricket.enums.GameStatus;
+import com.project.handcricket.helper.Helper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,7 @@ public class Game {
   private Player bowler;
 
   public Game() {
+    this.id = Helper.getRandomID(5);
     this.touch();
     this.gameStatus = GameStatus.NOT_STARTED;
   }

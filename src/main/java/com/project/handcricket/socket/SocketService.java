@@ -1,4 +1,4 @@
-package com.project.handcricket.services;
+package com.project.handcricket.socket;
 
 import com.project.handcricket.models.Player;
 import com.project.handcricket.models.SocketConnection;

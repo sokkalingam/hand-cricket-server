@@ -26,19 +26,6 @@ public class ScheduledTasks {
     this.gameManageService.getActiveGames();
   }
 
-//  /**
-//   * Pings this application every 5 min
-//   * to keep Heroku hosting alive
-//   *
-//   * Bedtime is from 12 AM to 7 AM everyday
-//   */
-//  @Scheduled (fixedDelay = 5 * 60 * 1000)
-//  public void pinger() {
-//    DateTime dateTime = new DateTime();
-//    if (dateTime.getHourOfDay() >= 0  && dateTime.getHourOfDay() <= 6)
-//      return;
-//    System.out.println("Pinger: " + new Date());
-//    new RestTemplate().getForObject(baseUrl + "/keep-awake", String.class);
-//  }
+
 
 }

@@ -31,6 +31,7 @@ public class GamePlayService {
     if (PlayerHelper.isSameInput(game)) {
       // OUT
       PlayerHelper.setBatsmanOut(game);
+      playerNotificationService.alertOut(gameId);
       PlayerHelper.reverseRoles(game);
     } else {
       // NOT OUT
@@ -69,8 +70,8 @@ public class GamePlayService {
 
   public void runPlay(String gameId, String playerId) {
     play(gameId);
-    publishGame(gameDB.getGame(gameId));
     playerNotificationService.notifyResult(gameId, playerId);
+    publishGame(gameDB.getGame(gameId));
     unpauseOtherPlayers(gameId, playerId);
   }
 
@@ -80,16 +81,13 @@ public class GamePlayService {
         PlayerNotificationHelper.getPlayMsgForCurrentPlayer(gameId, playerId));
     playerNotificationService.notifyPlayer(gameId,
         PlayerHelper.getOtherPlayer(gameId, playerId).getId(),
-        PlayerNotificationHelper.getPlayMsgForCurrentPlayer(gameId, playerId));
+        PlayerNotificationHelper.playMsgForOtherPlayer(gameId, playerId));
   }
 
   public void gamePlay(String gameId, String playerId, Integer input) {
     PlayerHelper.setInput(gameId, playerId, input);
-    if (PlayerHelper.bothPlayersPlayed(gameId)) {
-      if (PlayerHelper.isSameInput(gameDB.getGame(gameId)))
-        playerNotificationService.alertPlayers(gameId, PlayerNotificationHelper.getOutMsg(gameId, playerId));
+    if (PlayerHelper.bothPlayersPlayed(gameId))
       runPlay(gameId, playerId);
-    }
     else
       holdPlay(gameId, playerId);
   }

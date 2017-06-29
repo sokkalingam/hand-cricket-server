@@ -21,16 +21,21 @@ public class PlayerNotificationService {
   }
 
   public void notifyGameRestart(String gameId) {
-    Game game = GameDB.getInstance().getGame(gameId);
     String message = "Game has been Restarted";
     notifyPlayers(gameId, message);
-    alertPlayers(gameId, message);
+    alertPlayers(gameId, "");
   }
 
   public void notifyPlayers(String gameId, String message) {
     Game game = GameDB.getInstance().getGame(gameId);
     notifyPlayer(gameId, game.getBatsman().getId(), message);
     notifyPlayer(gameId, game.getBowler().getId(), message);
+  }
+
+  public void alertOut(String gameId) {
+    Game game = GameDB.getInstance().getGame(gameId);
+    alertPlayer(gameId, game.getBatsman().getId(), PlayerNotificationHelper.getOutMsg(gameId, game.getBatsman().getId()));
+    alertPlayer(gameId, game.getBowler().getId(), PlayerNotificationHelper.getOutMsg(gameId, game.getBowler().getId()));
   }
 
   public void alertPlayers(String gameId, String message) {
@@ -40,16 +45,11 @@ public class PlayerNotificationService {
   }
 
   public void notifyPlayer(String gameId, String playerId, String message) {
-    Game game = GameDB.getInstance().getGame(gameId);
-    if (game == null) return;
-    template.convertAndSend("/player/notify/" + gameId + "/" + playerId,
-        message);
+    template.convertAndSend("/game/" + gameId + "/player/" + playerId + "/notify", message);
   }
 
   public void alertPlayer(String gameId, String playerId, String message) {
-    Game game = gameDB.getGame(gameId);
-    if (game == null) return;
-    template.convertAndSend("/player/alert/" + gameId + "/" + playerId, message);
+    template.convertAndSend("/game/" + gameId + "/player/" + playerId + "/alert", message);
   }
 
   public void notifyResult(String gameId, String playerId) {
@@ -59,7 +59,5 @@ public class PlayerNotificationService {
     template.convertAndSend(baseDest + gameId + "/" + PlayerHelper.getOtherPlayer(gameId, playerId).getId(),
         PlayerNotificationHelper.getResultForPlayer(gameId, PlayerHelper.getOtherPlayer(gameId, playerId).getId()));
   }
-
-
 
 }

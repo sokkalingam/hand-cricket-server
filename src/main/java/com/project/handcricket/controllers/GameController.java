@@ -3,6 +3,7 @@ package com.project.handcricket.controllers;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.Player;
 import com.project.handcricket.services.GameService;
+import com.project.handcricket.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,14 +23,17 @@ public class GameController {
   private GameService gameService;
 
   @Autowired
+  private PlayerService playerService;
+
+  @Autowired
   private SimpMessagingTemplate simpMessagingTemplate;
 
-  @RequestMapping(value = "/hostGame", method = RequestMethod.POST)
+  @RequestMapping(value = "/game/hostGame", method = RequestMethod.POST)
   public String getGameId(@RequestBody Player player) {
     return gameService.hostGame(player).getId();
   }
 
-  @RequestMapping(value = "/joinGame/{gameId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/game/joinGame/{gameId}", method = RequestMethod.POST)
   public Game joinGame(@PathVariable String gameId, @RequestBody Player player) {
     Game game = gameService.joinGame(gameId, player);
     publishGame(gameId);
@@ -41,18 +45,74 @@ public class GameController {
     simpMessagingTemplate.convertAndSend("/game/" + gameId, gameService.getGame(gameId));
   }
 
-  @MessageMapping("/game/{gameId}/{playerId}/play")
-  public void playInput(@DestinationVariable String gameId, @DestinationVariable String playerId,
+  @MessageMapping("/game/play/{gameId}/{playerId}")
+  public void play(@DestinationVariable String gameId, @DestinationVariable String playerId,
                         @RequestBody Integer input) {
-    simpMessagingTemplate.convertAndSend("/game/" + gameId + "/" + playerId, "");
+
+    playerService.setInput(gameId, playerId, input);
+    if (playerService.bothPlayersPlayed(gameId)) {
+      if (playerService.isSameInput(gameService.getGame(gameId)))
+        notifyHighlights(gameId, playerId);
+      gameService.play(gameId);
+      publishGame(gameId);
+      notifyResult(gameId, playerId);
+      unpauseOtherPlayers(gameId, playerId);
+    }
+    else
+      waitForPlay(gameId, playerId);
+
   }
 
-  @RequestMapping("/activeGames")
+  @RequestMapping("/game/activeGames")
   public Map<String, Game> getActiveGames() {
     return gameService.getActiveGames();
   }
 
-  @RequestMapping("/addGame")
+  @RequestMapping("/game/addGame")
   public Game getGame() { return gameService.addGame(); }
+
+  public void waitForPlay(String gameId, String playerId) {
+    pauseCurrentPlayer(gameId, playerId);
+    notifyCurrentPlayer(gameId, playerId);
+    notifyOtherPlayer(gameId, playerId);
+  }
+
+  public void pauseCurrentPlayer(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/player/wait/" + gameId + "/" + playerId, true);
+  }
+
+  public void unpauseOtherPlayers(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend(
+        "/game/player/wait/" + gameId + "/" + playerService.getPlayer(gameId, playerId).getId(),
+        false);
+    simpMessagingTemplate.convertAndSend(
+        "/game/player/wait/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        false);
+  }
+
+  public void notifyCurrentPlayer(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/player/notify/" + gameId + "/" + playerId,
+        playerService.getMessageForCurrentPlayer(gameId, playerId));
+  }
+
+  public void notifyOtherPlayer(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend(
+        "/game/player/notify/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getMessageForOtherPlayer(gameId, playerId));
+  }
+
+  public void notifyResult(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + playerId,
+        playerService.getResultForPlayer(gameId, playerId));
+    simpMessagingTemplate.convertAndSend("/game/result/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getResultForPlayer(gameId, playerService.getOtherPlayer(gameId, playerId).getId()));
+  }
+
+  public void notifyHighlights(String gameId, String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + playerId,
+        playerService.getHighlightMessage(gameId, playerId));
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getHighlightMessage(gameId, playerService.getOtherPlayer(gameId, playerId).getId()));
+  }
 
 }

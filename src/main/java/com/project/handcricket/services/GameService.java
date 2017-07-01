@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -97,12 +95,6 @@ public class GameService {
     return gameMap;
   }
 
-  public void setLastDelivery(String gameId, String playerId, Integer input) {
-    Game game = getGame(gameId);
-    Player player = getPlayer(game, playerId);
-    player.setLastDelivery(input);
-  }
-
   public void setGameStatus(Game game) {
     Player batsman = game.getBatsman();
     Player bowler = game.getBowler();
@@ -117,7 +109,8 @@ public class GameService {
     if (bowler.isOut() && batsman.isNotOut()) {
       // batman wins
       if (batsman.getRuns() >  bowler.getRuns()) {
-        batsman.setPlayerStatus(PlayerStatus.WON);
+        batsman.setStatus(PlayerStatus.Won);
+        bowler.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
       }
     }
@@ -126,27 +119,31 @@ public class GameService {
     if (batsman.isOut() && bowler.isOut()) {
       // bowler wins
       if (bowler.getRuns() > batsman.getRuns()) {
-        bowler.setPlayerStatus(PlayerStatus.WON);
+        bowler.setStatus(PlayerStatus.Won);
+        batsman.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
       }
       // draw
-      if (bowler.getRuns() == batsman.getRuns()) {
+      if (bowler.getRuns().equals(batsman.getRuns())) {
         game.setGameStatus(GameStatus.DRAW);
       }
     }
   }
 
-  public void play(String gameId) {
+  public Game play(String gameId) {
     Game game = getGame(gameId);
     playerService.addBalls(game.getBatsman());
-    if (playerService.isSameDelivery(game)) {
+    if (playerService.isSameInput(game)) {
+      // OUT
       playerService.setBatsmanOut(game);
       playerService.reverseRoles(game);
     } else {
+      // NOT OUT
       playerService.addRuns(game);
     }
     setGameStatus(game);
-    playerService.clearLastDeliveries(game);
+    playerService.clearInputs(game);
+    return game;
   }
 
 }

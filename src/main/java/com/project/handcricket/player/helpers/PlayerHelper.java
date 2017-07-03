@@ -89,6 +89,10 @@ public class PlayerHelper {
     player.setBalls(balls + 1);
   }
 
+  public static void addWin(Player player) {
+    player.setWins(player.getWins() + 1);
+  }
+
   /**
    * Set batsman to Out
    * @param game

@@ -32,7 +32,7 @@ public class PlayerNotificationHelper {
   }
 
   public static String getDisconnectedMsg(String gameId, String playerId) {
-    return PlayerHelper.getOtherPlayer(gameId, playerId).getName() + " got disconnected from the game";
+    return PlayerHelper.getPlayer(gameId, playerId).getName() + " got disconnected from the game";
   }
 
 }

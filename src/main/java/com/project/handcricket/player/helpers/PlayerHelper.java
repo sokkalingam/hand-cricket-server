@@ -9,6 +9,7 @@ public class PlayerHelper {
 
   public static Player getPlayer(String gameId, String playerId) {
     Game game = GameDB.getInstance().getGame(gameId);
+    if (game == null) return null;
     if (game.getBatsman().getId().equals(playerId))
       return game.getBatsman();
     else

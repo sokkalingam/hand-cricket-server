@@ -140,5 +140,16 @@ public class PlayerHelper {
       game.setBowler(null);
   }
 
+  public static void initPlayers(String gameId) {
+    Game game = GameDB.getInstance().getGame(gameId);
+    if (game == null) return;
+    initPlayer(game.getBatsman());
+    initPlayer(game.getBowler());
+  }
+
+  public static void initPlayer(Player player) {
+    resetPlayer(player);
+    player.setType(null);
+  }
 
 }

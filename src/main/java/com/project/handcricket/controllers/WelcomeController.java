@@ -10,4 +10,9 @@ public class WelcomeController {
   public String welcome() {
     return "Welcome! Spring Boot Server is Running..";
   }
+
+  @RequestMapping("/keep-awake")
+  public String keepAwake() {
+    return "Thank you for the wake up call, I am awake!";
+  }
 }

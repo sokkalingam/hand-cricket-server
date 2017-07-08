@@ -132,6 +132,12 @@ public class PlayerHelper {
     player.setRuns(null);
   }
 
+  public static void resetWins(Game game) {
+    if (game == null) return;
+    if (game.getBatsman() != null) game.getBatsman().setWins(null);
+    if (game.getBowler() != null) game.getBowler().setWins(null);
+  }
+
   public static void removePlayer(String gameId, String playerId) {
     Game game = GameDB.getInstance().getGame(gameId);
     if (game.getBatsman().getId().equals(playerId))
@@ -150,6 +156,12 @@ public class PlayerHelper {
   public static void initPlayer(Player player) {
     resetPlayer(player);
     player.setType(null);
+  }
+
+  public static Player newPlayer(Player player) {
+    Player newPlayer = new Player();
+    newPlayer.setName(player.getName());
+    return newPlayer;
   }
 
 }

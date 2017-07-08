@@ -5,6 +5,8 @@ import com.project.handcricket.enums.GameStatus;
 import com.project.handcricket.game.play.GamePlayService;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.Player;
+import com.project.handcricket.player.helpers.PlayerHelper;
+import com.project.handcricket.player.services.PlayerNotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +15,14 @@ public class GameSetupService {
 
   private GameDB gameDB;
   private GamePlayService gamePlayService;
+  private PlayerNotificationService playerNotificationService;
 
   @Autowired
-  public GameSetupService(GamePlayService gamePlayService) {
+  public GameSetupService(GamePlayService gamePlayService,
+                          PlayerNotificationService playerNotificationService) {
     gameDB = GameDB.getInstance();
     this.gamePlayService = gamePlayService;
+    this.playerNotificationService = playerNotificationService;
   }
 
   public Game getNewGame() {
@@ -33,14 +38,20 @@ public class GameSetupService {
   }
 
   public Game joinGame(String gameId, Player player) {
-    Game game = gameDB.getGame(gameId);
+    if (gameId == null) return null;
+    Game game = gameDB.getGame(gameId.toUpperCase());
     if (game == null) return null;
     if (!isGameOpenToPlay(game)) return null;
+    processJoin(game, player);
+    this.gamePlayService.publishGame(game);
+    return game;
+  }
+
+  public void processJoin(Game game, Player player) {
     game.setBowler(player);
     game.setGameStatus(GameStatus.IN_PROGRESS);
     game.setConnected(true);
-    this.gamePlayService.publishGame(game);
-    return game;
+    PlayerHelper.resetWins(game);
   }
 
   public boolean isGameOpenToPlay(Game game) {

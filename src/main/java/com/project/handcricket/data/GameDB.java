@@ -38,7 +38,6 @@ public class GameDB {
   }
 
   public Map<String, GameAndPlayer> getSocketMap() {
-    System.out.println(socketMap);
     return socketMap;
   }
 }

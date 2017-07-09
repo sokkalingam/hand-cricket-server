@@ -63,6 +63,7 @@ public class GameService {
   public Game joinGame(String gameId, Player player) {
     Game game = gameMap.get(gameId);
     if (game == null) return null;
+    if (game.getBowler() != null) return null;
     game.touch();
     game.setBowler(player);
     game.setGameStatus(GameStatus.IN_PROGRESS);

@@ -52,7 +52,7 @@ public class GamePlayService {
     Game game = gameDB.getGame(gameId);
     game.setGameStatus(GameStatus.IN_PROGRESS);
     PlayerHelper.resetPlayers(game);
-    playerNotificationService.notifyGameRestart(gameId);
+//    playerNotificationService.notifyGameRestart(gameId);
     publishGame(game);
     return game;
   }

@@ -83,6 +83,12 @@ public class GameController {
 
   }
 
+  @MessageMapping("/game/{gameId}/quit")
+  public void quitGame(@DestinationVariable String gameId, @RequestBody String playerId) {
+    simpMessagingTemplate.convertAndSend("/game/highlight/" + gameId + "/" + playerService.getOtherPlayer(gameId, playerId).getId(),
+        playerService.getPlayer(gameId, playerId).getName() + " got disconnected from the game");
+  }
+
   public void waitForPlay(String gameId, String playerId) {
     pauseCurrentPlayer(gameId, playerId);
     notifyCurrentPlayer(gameId, playerId);

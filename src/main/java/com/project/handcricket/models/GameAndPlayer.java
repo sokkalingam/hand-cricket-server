@@ -3,13 +3,13 @@ package com.project.handcricket.models;
 public class GameAndPlayer {
 
   private String gameId;
-  private Player player;
+  private String playerId;
 
   public GameAndPlayer() { }
 
-  public GameAndPlayer(String gameId, Player player) {
+  public GameAndPlayer(String gameId, String playerId) {
     this.gameId = gameId;
-    this.player = player;
+    this.playerId = playerId;
   }
 
   public String getGameId() {
@@ -20,11 +20,11 @@ public class GameAndPlayer {
     this.gameId = gameId;
   }
 
-  public Player getPlayer() {
-    return player;
+  public String getPlayerId() {
+    return playerId;
   }
 
-  public void setPlayer(Player player) {
-    this.player = player;
+  public void setPlayerId(String playerId) {
+    this.playerId = playerId;
   }
 }

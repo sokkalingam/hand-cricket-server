@@ -1,15 +1,20 @@
 package com.project.handcricket.models;
 
+import java.util.Date;
+
 public class GameView {
 
   private String gameId;
   private String batsmanName;
   private String bowlerName;
+  private String lastUpdated;
 
-  public GameView(String gameId, String batsmanName, String bowlerName) {
-    this.gameId = gameId;
-    this.batsmanName = batsmanName;
-    this.bowlerName = bowlerName;
+  public GameView(Game game) {
+    if (game == null) return;
+    this.gameId = game.getId();
+    this.batsmanName = game.getBatsman() != null ? game.getBatsman().getName() : null;
+    this.bowlerName = game.getBowler() != null ? game.getBowler().getName() : null;
+    this.lastUpdated = game.getLastUpdated() != null ? game.getLastUpdated().toString() : null;
   }
 
   public String getGameId() {
@@ -34,5 +39,13 @@ public class GameView {
 
   public void setBowlerName(String bowlerName) {
     this.bowlerName = bowlerName;
+  }
+
+  public String getLastUpdated() {
+    return lastUpdated;
+  }
+
+  public void setLastUpdated(String lastUpdated) {
+    this.lastUpdated = lastUpdated;
   }
 }

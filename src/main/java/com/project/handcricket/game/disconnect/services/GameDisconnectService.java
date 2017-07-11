@@ -28,6 +28,6 @@ public class GameDisconnectService {
   public void disconnect(String sessionId) {
     GameAndPlayer gp = GameDB.getInstance().getSocketMap().get(sessionId);
     if (gp == null) return;
-    disconnect(gp.getGameId(), gp.getPlayer().getId());
+    disconnect(gp.getGameId(), gp.getPlayerId());
   }
 }

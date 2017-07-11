@@ -28,10 +28,4 @@ public class GamePlayController {
     gamePlayService.gamePlay(gameId, playerId, input);
   }
 
-  @MessageMapping("/ping/{gameId}/{playerId}")
-  public void ping(@DestinationVariable String gameId, @DestinationVariable String playerId,
-                   SimpMessageHeaderAccessor headerAccessor) {
-    gamePlayService.ping(gameId, playerId, headerAccessor.getSessionId());
-  }
-
 }

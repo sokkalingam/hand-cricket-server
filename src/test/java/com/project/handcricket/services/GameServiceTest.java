@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import com.project.handcricket.enums.GameStatus;
+import com.project.handcricket.game.setup.GameSetupService;
 import com.project.handcricket.models.Game;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +18,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class GameServiceTest {
 
   @Autowired
-  private GameService gameService;
+  private GameSetupService gameSetupService;
 
   @Test
   public void setupGameTest() {
-    Game game = gameService.setupGame();
+    Game game = gameSetupService.getNewGame();
     assert game.getId().length() == 5;
     assert game.getGameStatus() == GameStatus.NOT_STARTED;
   }

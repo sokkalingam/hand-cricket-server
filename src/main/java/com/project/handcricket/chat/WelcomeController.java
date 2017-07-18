@@ -1,4 +1,4 @@
-package com.project.handcricket.controllers;
+package com.project.handcricket.chat;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

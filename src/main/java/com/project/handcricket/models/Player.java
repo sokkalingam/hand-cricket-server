@@ -83,4 +83,5 @@ public class Player {
   public void setInput(Integer input) {
     this.input = input;
   }
+
 }

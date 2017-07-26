@@ -4,6 +4,7 @@ import com.project.handcricket.enums.GameStatus;
 import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.Player;
+import com.project.handcricket.player.helpers.PlayerHelper;
 
 public class GamePlayHelper {
 
@@ -20,6 +21,7 @@ public class GamePlayHelper {
     // bowler is out, batsman chasing
     if (bowler.isOut() && batsman.isNotOut() && batsman.getRuns() >  bowler.getRuns()) {
         batsman.setStatus(PlayerStatus.Won);
+        PlayerHelper.addWin(batsman);
         bowler.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
     }
@@ -29,6 +31,7 @@ public class GamePlayHelper {
       // bowler wins
       if (bowler.getRuns() > batsman.getRuns()) {
         bowler.setStatus(PlayerStatus.Won);
+        PlayerHelper.addWin(bowler);
         batsman.setStatus(PlayerStatus.Lost);
         game.setGameStatus(GameStatus.GAME_OVER);
       }

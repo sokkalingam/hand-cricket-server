@@ -13,6 +13,7 @@ public class Player {
   private Integer input;
   private PlayerStatus status;
   private PlayerType type;
+  private Integer wins;
 
   public String getId() {
     return id;
@@ -82,6 +83,14 @@ public class Player {
 
   public void setInput(Integer input) {
     this.input = input;
+  }
+
+  public Integer getWins() {
+    return wins != null ? wins : 0;
+  }
+
+  public void setWins(Integer wins) {
+    this.wins = wins;
   }
 
 }

@@ -9,6 +9,7 @@ public class PlayerHelper {
 
   public static Player getPlayer(String gameId, String playerId) {
     Game game = GameDB.getInstance().getGame(gameId);
+    if (game == null) return null;
     if (game.getBatsman().getId().equals(playerId))
       return game.getBatsman();
     else
@@ -129,6 +130,14 @@ public class PlayerHelper {
     player.setLastDelivery(null);
     player.setBalls(null);
     player.setRuns(null);
+  }
+
+  public static void removePlayer(String gameId, String playerId) {
+    Game game = GameDB.getInstance().getGame(gameId);
+    if (game.getBatsman().getId().equals(playerId))
+      game.setBatsman(null);
+    else if (game.getBowler().getId().equals(playerId))
+      game.setBowler(null);
   }
 
 

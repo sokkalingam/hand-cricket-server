@@ -1,17 +1,21 @@
 package com.project.handcricket.data;
 
 import com.project.handcricket.models.Game;
+import com.project.handcricket.models.GameAndPlayer;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class GameDB {
 
   private static GameDB instance = null;
 
-  private HashMap<String, Game> gameMap;
+  private Map<String, Game> gameMap;
+  private Map<String, GameAndPlayer> socketMap;
 
   private GameDB() {
     gameMap = new HashMap<String, Game>();
+    socketMap = new HashMap<String, GameAndPlayer>();
   }
 
   public static GameDB getInstance() {
@@ -29,7 +33,12 @@ public class GameDB {
     return gameMap.get(gameId);
   }
 
-  public HashMap<String, Game> getGameMap() {
+  public Map<String, Game> getGameMap() {
     return gameMap;
+  }
+
+  public Map<String, GameAndPlayer> getSocketMap() {
+    System.out.println(socketMap);
+    return socketMap;
   }
 }

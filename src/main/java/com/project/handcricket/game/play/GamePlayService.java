@@ -6,7 +6,9 @@ import com.project.handcricket.models.Game;
 import com.project.handcricket.player.helpers.PlayerHelper;
 import com.project.handcricket.player.helpers.PlayerNotificationHelper;
 import com.project.handcricket.player.services.PlayerNotificationService;
+import com.project.handcricket.socket.SocketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +16,16 @@ import org.springframework.stereotype.Service;
 public class GamePlayService {
 
   private PlayerNotificationService playerNotificationService;
+  private SocketService socketService;
   private SimpMessagingTemplate template;
   private GameDB gameDB;
 
   @Autowired
   public GamePlayService(PlayerNotificationService playerNotificationService,
+                         SocketService socketService,
                          SimpMessagingTemplate template) {
     this.playerNotificationService = playerNotificationService;
+    this.socketService = socketService;
     this.template = template;
     this.gameDB = GameDB.getInstance();
   }
@@ -90,6 +95,11 @@ public class GamePlayService {
       runPlay(gameId, playerId);
     else
       holdPlay(gameId, playerId);
+  }
+
+  public void ping(String gameId, String playerId, String sessionId) {
+    socketService.storeSocketInfo(sessionId, gameId, PlayerHelper.getPlayer(gameId, playerId));
+    template.convertAndSend("/game/ping/" + gameId + "/" + playerId, "Ping received!");
   }
 
 }

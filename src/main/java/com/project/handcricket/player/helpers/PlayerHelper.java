@@ -74,10 +74,9 @@ public class PlayerHelper {
   public static void addRuns(Game game) {
     Player batsman = game.getBatsman();
     Player bowler = game.getBowler();
-//  TODO: When batsman plays 0, his score is 0 for that play. Bowler's score is not added.
-//    if (batsman.getInput() == 0)
-//      batsman.setRuns(batsman.getRuns() + bowler.getInput());
-//    else
+    if (batsman.getInput() == 0)
+      batsman.setRuns(batsman.getRuns() + bowler.getInput());
+    else
       batsman.setRuns(batsman.getRuns() + batsman.getInput());
   }
 

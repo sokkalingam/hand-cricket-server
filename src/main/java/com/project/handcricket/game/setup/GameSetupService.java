@@ -38,6 +38,7 @@ public class GameSetupService {
     if (!isGameOpenToPlay(game)) return null;
     game.setBowler(player);
     game.setGameStatus(GameStatus.IN_PROGRESS);
+    game.setConnected(true);
     this.gamePlayService.publishGame(game);
     return game;
   }

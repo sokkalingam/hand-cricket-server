@@ -15,6 +15,7 @@ public class Game {
   private GameStatus gameStatus;
   private Player batsman;
   private Player bowler;
+  private boolean connected;
 
   public Game() {
     this.id = Helper.getRandomID(5);
@@ -78,4 +79,11 @@ public class Game {
    */
   public void touch() { this.lastUpdated = new Date(); }
 
+  public boolean isConnected() {
+    return connected;
+  }
+
+  public void setConnected(boolean connected) {
+    this.connected = connected;
+  }
 }

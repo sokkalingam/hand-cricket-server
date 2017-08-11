@@ -2,6 +2,7 @@ package com.project.handcricket.models;
 
 import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.enums.PlayerType;
+import com.project.handcricket.helper.Helper;
 
 public class Player {
 
@@ -14,6 +15,11 @@ public class Player {
   private PlayerStatus status;
   private PlayerType type;
   private Integer wins;
+
+  public Player() {
+    this.id = Helper.getRandomID(5);
+    this.status = PlayerStatus.NotOut;
+  }
 
   public String getId() {
     return id;

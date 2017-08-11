@@ -2,6 +2,7 @@ package com.project.handcricket.game.disconnect.services;
 
 import com.project.handcricket.data.GameDB;
 import com.project.handcricket.enums.GameStatus;
+import com.project.handcricket.game.disconnect.helpers.GameDisconnectHelper;
 import com.project.handcricket.game.play.GamePlayService;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.GameAndPlayer;
@@ -18,10 +19,10 @@ public class GameDisconnectService {
   public void disconnect(String gameId, String playerId) {
     if (PlayerHelper.getPlayer(gameId, playerId) == null) return;
     Game game = GameDB.getInstance().getGame(gameId);
-    game.setConnected(false);
-    game.setGameStatus(GameStatus.NOT_STARTED);
+    GameDisconnectHelper.processGameDisconnect(game);
     PlayerHelper.initPlayers(gameId);
     gamePlayService.publishGame(game);
+    GameDB.getInstance().getGameMap().remove(gameId);
   }
 
   public void disconnect(String sessionId) {

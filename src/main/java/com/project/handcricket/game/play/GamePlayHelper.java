@@ -42,4 +42,12 @@ public class GamePlayHelper {
     }
   }
 
+  /**
+   * Set Target Score only if current batsman was first to bat
+   * @param game
+   */
+  public static void setTargetScore(Game game) {
+    if (game.getBowler().isNotOut())
+      game.setTargetScore(game.getBatsman().getRuns());
+  }
 }

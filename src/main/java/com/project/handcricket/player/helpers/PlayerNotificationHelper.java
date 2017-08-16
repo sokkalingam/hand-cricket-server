@@ -7,12 +7,12 @@ import com.project.handcricket.models.Player;
 public class PlayerNotificationHelper {
 
   public static String getPlayMsgForCurrentPlayer(String gameId, String playerId) {
-    return "You have played " + PlayerHelper.getPlayer(gameId, playerId).getInput() +
-        ", waiting for " + PlayerHelper.getOtherPlayer(gameId, playerId).getName() + " to play";
+    return "Played " + PlayerHelper.getPlayer(gameId, playerId).getInput() +
+        ";Yet to Play";
   }
 
   public static String playMsgForOtherPlayer(String gameId, String playerId) {
-    return PlayerHelper.getPlayer(gameId, playerId).getName() + " has played, waiting for you to play";
+    return "Your turn to Play;Has Played";
   }
 
   public static String getResultForPlayer(String gameId, String playerId) {

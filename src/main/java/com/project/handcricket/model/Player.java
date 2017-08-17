@@ -1,4 +1,4 @@
-package com.project.handcricket.models;
+package com.project.handcricket.model;
 
 import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.enums.PlayerType;

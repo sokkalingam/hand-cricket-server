@@ -1,11 +1,9 @@
-package com.project.handcricket.models;
+package com.project.handcricket.model;
 
 import com.project.handcricket.enums.GameStatus;
 import com.project.handcricket.helper.Helper;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Game {
 

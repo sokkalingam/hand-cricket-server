@@ -1,7 +1,6 @@
 package com.project.handcricket.chat;
 
-import com.project.handcricket.models.Message;
-import com.project.handcricket.chat.ChatService;
+import com.project.handcricket.model.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

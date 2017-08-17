@@ -1,4 +1,4 @@
-package com.project.handcricket.models;
+package com.project.handcricket.model;
 
 public class SocketConnection {
 

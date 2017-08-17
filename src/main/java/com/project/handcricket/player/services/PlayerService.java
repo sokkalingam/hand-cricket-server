@@ -1,6 +1,6 @@
 package com.project.handcricket.player.services;
 
-import com.project.handcricket.models.Player;
+import com.project.handcricket.model.Player;
 import com.project.handcricket.player.helpers.PlayerHelper;
 import org.springframework.stereotype.Service;
 

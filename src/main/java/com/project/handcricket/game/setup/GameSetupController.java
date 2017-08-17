@@ -1,7 +1,7 @@
 package com.project.handcricket.game.setup;
 
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.Player;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;

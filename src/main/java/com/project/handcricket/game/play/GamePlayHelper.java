@@ -2,8 +2,8 @@ package com.project.handcricket.game.play;
 
 import com.project.handcricket.enums.GameStatus;
 import com.project.handcricket.enums.PlayerStatus;
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.Player;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.Player;
 import com.project.handcricket.player.helpers.PlayerHelper;
 
 public class GamePlayHelper {

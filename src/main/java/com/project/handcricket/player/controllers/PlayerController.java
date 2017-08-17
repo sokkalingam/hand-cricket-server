@@ -1,6 +1,6 @@
 package com.project.handcricket.player.controllers;
 
-import com.project.handcricket.models.Player;
+import com.project.handcricket.model.Player;
 import com.project.handcricket.player.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;

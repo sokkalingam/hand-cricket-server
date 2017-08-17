@@ -23,7 +23,8 @@ public class GamePlayController {
   }
 
   @MessageMapping("/play/{gameId}/{playerId}")
-  public void play(@DestinationVariable String gameId, @DestinationVariable String playerId,
+  public void play(@DestinationVariable String gameId,
+                   @DestinationVariable String playerId,
                    @RequestBody Integer input) {
     gamePlayService.gamePlay(gameId, playerId, input);
   }

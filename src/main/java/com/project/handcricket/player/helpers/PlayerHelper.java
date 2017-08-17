@@ -125,6 +125,7 @@ public class PlayerHelper {
    * @param player
    */
   public static void resetPlayer(Player player) {
+    if (player == null) return;
     player.setStatus(PlayerStatus.NotOut);
     player.setInput(null);
     player.setLastDelivery(null);
@@ -154,6 +155,7 @@ public class PlayerHelper {
   }
 
   public static void initPlayer(Player player) {
+    if (player == null) return;
     resetPlayer(player);
     player.setType(null);
   }

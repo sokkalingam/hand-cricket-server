@@ -3,11 +3,9 @@ package com.project.handcricket.game.manage;
 import com.project.handcricket.data.GameDB;
 import com.project.handcricket.models.Game;
 import com.project.handcricket.models.GameView;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +20,7 @@ public class GameManageService {
     Iterator<Game> iterator = gameMap.values().iterator();
     while(iterator.hasNext()) {
       Game game = iterator.next();
-      games.add(
-          new GameView(
-              game.getId(),
-              game.getBatsman() != null ? game.getBatsman().getName() : null,
-              game.getBowler() != null ? game.getBowler().getName() : null)
-      );
+      games.add(new GameView(game));
     }
 
     return games;

@@ -14,8 +14,8 @@ import java.util.Map;
 @Service
 public class SocketService {
 
-  public void storeSocketInfo(String socketId, String gameId, Player player) {
-    GameDB.getInstance().getSocketMap().put(socketId, new GameAndPlayer(gameId, player));
+  public void storeSocketInfo(String socketId, String gameId, String playerId) {
+    GameDB.getInstance().getSocketMap().put(socketId, new GameAndPlayer(gameId, playerId));
   }
 
 }

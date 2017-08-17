@@ -98,9 +98,4 @@ public class GamePlayService {
       holdPlay(gameId, playerId);
   }
 
-  public void ping(String gameId, String playerId, String sessionId) {
-    socketService.storeSocketInfo(sessionId, gameId, PlayerHelper.getPlayer(gameId, playerId));
-    template.convertAndSend("/game/ping/" + gameId + "/" + playerId, "Ping received!");
-  }
-
 }

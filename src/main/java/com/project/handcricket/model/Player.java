@@ -3,6 +3,7 @@ package com.project.handcricket.model;
 import com.project.handcricket.enums.PlayerStatus;
 import com.project.handcricket.enums.PlayerType;
 import com.project.handcricket.helper.Helper;
+import org.springframework.data.annotation.Id;
 
 public class Player {
 

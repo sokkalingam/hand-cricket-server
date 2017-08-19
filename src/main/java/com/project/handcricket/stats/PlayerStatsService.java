@@ -1,5 +1,6 @@
 package com.project.handcricket.stats;
 
+import com.project.handcricket.datarefresh.DataRefreshService;
 import com.project.handcricket.model.Player;
 import com.project.handcricket.mongodb.model.DataRefresh;
 import com.project.handcricket.mongodb.model.PlayerRun;
@@ -7,12 +8,10 @@ import com.project.handcricket.mongodb.model.PlayerWin;
 import com.project.handcricket.mongodb.repo.DataRefreshRepo;
 import com.project.handcricket.mongodb.repo.PlayerRunsRepo;
 import com.project.handcricket.mongodb.repo.PlayerWinsRepo;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,33 +19,20 @@ public class PlayerStatsService {
 
   private PlayerRunsRepo playerRunsRepo;
   private PlayerWinsRepo playerWinsRepo;
-  private DataRefreshRepo dataRefreshRepo;
+
+  private DataRefreshService dataRefreshService;
 
   @Autowired
   public PlayerStatsService(PlayerRunsRepo playerRunsRepo, PlayerWinsRepo playerWinsRepo,
-                            DataRefreshRepo dataRefreshRepo) {
+                            DataRefreshService dataRefreshService) {
     this.playerRunsRepo = playerRunsRepo;
     this.playerWinsRepo = playerWinsRepo;
-    this.dataRefreshRepo = dataRefreshRepo;
+    this.dataRefreshService = dataRefreshService;
   }
 
   public void dataRefresh() {
-    DataRefresh dataRefresh = new DataRefresh();
-    List<DataRefresh> list = dataRefreshRepo.findAll();
-
-    if (list != null && list.size() > 0) {
-      dataRefresh = list.get(0);
-      LocalDate timeNow = new DateTime().toLocalDate();
-      LocalDate timeThen = new DateTime(dataRefresh.getPlayerStatsLastRefreshed()).toLocalDate();
-      if(timeNow.compareTo(timeThen) > 0) {
-        deleteAll();
-        dataRefresh.setPlayerStatsLastRefreshed(timeNow.toDate());
-        dataRefreshRepo.save(dataRefresh);
-        dataRefreshRepo.delete(list.get(0));
-      }
-    } else {
-      dataRefreshRepo.save(dataRefresh);
-    }
+    if (this.dataRefreshService.refreshData())
+      deleteAll();
   }
 
   public void deleteAll() {

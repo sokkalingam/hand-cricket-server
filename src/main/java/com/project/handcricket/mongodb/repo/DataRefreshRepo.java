@@ -7,6 +7,6 @@ import java.util.Date;
 
 public interface DataRefreshRepo extends MongoRepository<DataRefresh, String>  {
 
-
+  DataRefresh findTopByOrderByPlayerStatsDate();
 
 }

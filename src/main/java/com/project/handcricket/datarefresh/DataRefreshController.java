@@ -25,8 +25,8 @@ public class DataRefreshController {
   }
 
   @RequestMapping("/clearAll")
-  public String deleteAll() {
-    return this.dataRefreshService.deleteAll();
+  public void deleteAll() {
+    this.dataRefreshService.deleteAll();
   }
 
   @RequestMapping("/refresh")

@@ -52,10 +52,10 @@ public class PlayerStatsService {
 
   public boolean updateTopRunsPlayer(Player player) {
     PlayerRun playerWithMaxRuns = getPlayerWithMaxRuns();
-    if (playerWithMaxRuns == null || player.getRuns() > playerWithMaxRuns.getRuns()) {
+    if (playerWithMaxRuns == null || playerWithMaxRuns.getRuns() == null || player.getRuns() > playerWithMaxRuns.getRuns()) {
+      if (playerWithMaxRuns != null && playerWithMaxRuns.getRuns() != null && player.getRuns() > playerWithMaxRuns.getRuns())
+        this.playerRunsRepo.deleteAll();
       this.playerRunsRepo.save(new PlayerRun(player.getName(), player.getRuns()));
-      if (playerWithMaxRuns != null)
-        this.playerRunsRepo.delete(playerWithMaxRuns);
       return true;
     }
     return false;
@@ -63,10 +63,10 @@ public class PlayerStatsService {
 
   public boolean updateTopWinsPlayer(Player player) {
     PlayerWin playerWithMaxWins = getPlayerWithMaxWins();
-    if (playerWithMaxWins == null || player.getWins() > playerWithMaxWins.getWins()) {
+    if (playerWithMaxWins == null || playerWithMaxWins.getWins() == null || player.getWins() > playerWithMaxWins.getWins()) {
+      if (playerWithMaxWins != null && playerWithMaxWins.getWins() != null && player.getWins() > playerWithMaxWins.getWins())
+        this.playerWinsRepo.deleteAll();
       this.playerWinsRepo.save(new PlayerWin(player.getName(), player.getWins()));
-      if (playerWithMaxWins != null)
-        this.playerWinsRepo.delete(playerWithMaxWins);
       return true;
     }
     return false;

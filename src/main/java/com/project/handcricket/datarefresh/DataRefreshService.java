@@ -31,9 +31,7 @@ public class DataRefreshService {
     DataRefresh dataRefresh = this.dataRefreshRepo.findTopByOrderByPlayerStatsDate();
 
     if (dataRefresh == null || dataRefresh.getPlayerStatsDate() == null) {
-      dataRefresh = new DataRefresh();
-      dataRefresh.setPlayerStatsDate(new LocalDate());
-      this.dataRefreshRepo.save(dataRefresh);
+      this.dataRefreshRepo.save(new DataRefresh());
       return false;
     }
 

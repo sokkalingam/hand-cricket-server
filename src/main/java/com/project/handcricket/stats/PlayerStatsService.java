@@ -60,7 +60,6 @@ public class PlayerStatsService {
   }
 
   public boolean updateTopRunsPlayer(Player player) {
-    dataRefresh();
     PlayerRun playerWithMaxRuns = getPlayerWithMaxRuns();
     if (playerWithMaxRuns == null || playerWithMaxRuns.getRuns() == null || player.getRuns() > playerWithMaxRuns.getRuns()) {
       if (playerWithMaxRuns != null && playerWithMaxRuns.getRuns() != null && player.getRuns() > playerWithMaxRuns.getRuns())
@@ -72,7 +71,6 @@ public class PlayerStatsService {
   }
 
   public boolean updateTopWinsPlayer(Player player) {
-    dataRefresh();
     PlayerWin playerWithMaxWins = getPlayerWithMaxWins();
     if (playerWithMaxWins == null || playerWithMaxWins.getWins() == null || player.getWins() > playerWithMaxWins.getWins()) {
       if (playerWithMaxWins != null && playerWithMaxWins.getWins() != null && player.getWins() > playerWithMaxWins.getWins())

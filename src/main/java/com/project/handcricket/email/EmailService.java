@@ -23,7 +23,7 @@ public class EmailService {
   public void sendMail(Email email) {
     SimpleMailMessage mailMessage = new SimpleMailMessage();
     mailMessage.setTo("handcricketgame@gmail.com");
-    mailMessage.setSubject("User Feedback " + new Date());
+    mailMessage.setSubject("User Feedback");
     mailMessage.setText(email.toString());
     mailMessage.setFrom("Feedback");
     javaMailSender.send(mailMessage);

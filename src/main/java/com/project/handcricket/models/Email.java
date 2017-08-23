@@ -41,6 +41,16 @@ public class Email {
 
   @Override
   public String toString() {
-    return "Feedback: " + this.body + "\n\nFrom: " + this.name + ", Email: " + this.email;
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("Feedback: ").append(this.body);
+
+    if (this.name != null)
+      sb.append("\n\nFrom: ").append(this.name);
+
+    if (this.email != null)
+      sb.append("\nEmail: ").append(this.email);
+
+    return sb.toString();
   }
 }

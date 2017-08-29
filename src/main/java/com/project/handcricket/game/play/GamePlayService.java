@@ -1,14 +1,13 @@
 package com.project.handcricket.game.play;
 
-import com.project.handcricket.data.GameDB;
+import com.project.handcricket.data.GameData;
 import com.project.handcricket.enums.GameStatus;
-import com.project.handcricket.models.Game;
+import com.project.handcricket.model.Game;
 import com.project.handcricket.player.helpers.PlayerHelper;
 import com.project.handcricket.player.helpers.PlayerNotificationHelper;
 import com.project.handcricket.player.services.PlayerNotificationService;
 import com.project.handcricket.socket.SocketService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class GamePlayService {
   private PlayerNotificationService playerNotificationService;
   private SocketService socketService;
   private SimpMessagingTemplate template;
-  private GameDB gameDB;
+  private GameData gameData;
 
   @Autowired
   public GamePlayService(PlayerNotificationService playerNotificationService,
@@ -27,11 +26,11 @@ public class GamePlayService {
     this.playerNotificationService = playerNotificationService;
     this.socketService = socketService;
     this.template = template;
-    this.gameDB = GameDB.getInstance();
+    this.gameData = GameData.getInstance();
   }
 
   public Game play(String gameId) {
-    Game game = gameDB.getGame(gameId);
+    Game game = gameData.getGame(gameId);
     PlayerHelper.addBalls(game.getBatsman());
     if (PlayerHelper.isSameInput(game)) {
       // OUT
@@ -49,7 +48,7 @@ public class GamePlayService {
   }
 
   public Game restartGame(String gameId) {
-    Game game = gameDB.getGame(gameId);
+    Game game = gameData.getGame(gameId);
     game.setGameStatus(GameStatus.IN_PROGRESS);
     PlayerHelper.resetPlayers(game);
 //    playerNotificationService.notifyGameRestart(gameId);
@@ -77,7 +76,7 @@ public class GamePlayService {
   public void runPlay(String gameId, String playerId) {
     play(gameId);
 //    playerNotificationService.notifyResult(gameId, playerId);
-    publishGame(gameDB.getGame(gameId));
+    publishGame(gameData.getGame(gameId));
     unpauseOtherPlayers(gameId, playerId);
   }
 

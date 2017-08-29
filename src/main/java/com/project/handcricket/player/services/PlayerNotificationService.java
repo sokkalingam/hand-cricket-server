@@ -1,7 +1,7 @@
 package com.project.handcricket.player.services;
 
-import com.project.handcricket.data.GameDB;
-import com.project.handcricket.models.Game;
+import com.project.handcricket.data.GameData;
+import com.project.handcricket.model.Game;
 import com.project.handcricket.player.helpers.PlayerHelper;
 import com.project.handcricket.player.helpers.PlayerNotificationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class PlayerNotificationService {
 
-  private GameDB gameDB;
+  private GameData gameData;
   private SimpMessagingTemplate template;
 
   @Autowired
   public PlayerNotificationService(SimpMessagingTemplate template) {
     this.template = template;
-    this.gameDB = GameDB.getInstance();
+    this.gameData = GameData.getInstance();
   }
 
   public void notifyGameRestart(String gameId) {
@@ -27,19 +27,19 @@ public class PlayerNotificationService {
   }
 
   public void notifyPlayers(String gameId, String message) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     notifyPlayer(gameId, game.getBatsman().getId(), message);
     notifyPlayer(gameId, game.getBowler().getId(), message);
   }
 
   public void alertOut(String gameId) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     alertPlayer(gameId, game.getBatsman().getId(), PlayerNotificationHelper.getOutMsg(gameId, game.getBatsman().getId()));
     alertPlayer(gameId, game.getBowler().getId(), PlayerNotificationHelper.getOutMsg(gameId, game.getBowler().getId()));
   }
 
   public void alertPlayers(String gameId, String message) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     alertPlayer(gameId, game.getBatsman().getId(), message);
     alertPlayer(gameId, game.getBowler().getId(), message);
   }

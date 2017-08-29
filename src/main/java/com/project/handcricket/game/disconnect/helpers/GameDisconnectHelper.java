@@ -1,7 +1,7 @@
 package com.project.handcricket.game.disconnect.helpers;
 
 import com.project.handcricket.enums.GameStatus;
-import com.project.handcricket.models.Game;
+import com.project.handcricket.model.Game;
 
 public class GameDisconnectHelper {
 

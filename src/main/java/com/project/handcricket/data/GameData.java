@@ -1,26 +1,26 @@
 package com.project.handcricket.data;
 
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.GameAndPlayer;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.GameAndPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameDB {
+public class GameData {
 
-  private static GameDB instance = null;
+  private static GameData instance = null;
 
   private Map<String, Game> gameMap;
   private Map<String, GameAndPlayer> socketMap;
 
-  private GameDB() {
+  private GameData() {
     gameMap = new HashMap<String, Game>();
     socketMap = new HashMap<String, GameAndPlayer>();
   }
 
-  public static GameDB getInstance() {
+  public static GameData getInstance() {
     if (instance == null)
-      instance = new GameDB();
+      instance = new GameData();
     return instance;
   }
 

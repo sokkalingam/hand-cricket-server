@@ -1,14 +1,14 @@
 package com.project.handcricket.player.helpers;
 
-import com.project.handcricket.data.GameDB;
+import com.project.handcricket.data.GameData;
 import com.project.handcricket.enums.PlayerStatus;
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.Player;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.Player;
 
 public class PlayerHelper {
 
   public static Player getPlayer(String gameId, String playerId) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     if (game == null) return null;
     if (game.getBatsman().getId().equals(playerId))
       return game.getBatsman();
@@ -17,7 +17,7 @@ public class PlayerHelper {
   }
 
   public static Player getOtherPlayer(String gameId, String playerId) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     if (!game.getBatsman().getId().equals(playerId))
       return game.getBatsman();
     else
@@ -62,7 +62,7 @@ public class PlayerHelper {
    * @return
    */
   public static boolean bothPlayersPlayed(String gameId) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     return game.getBatsman().getInput() != null
         && game.getBowler().getInput() != null;
   }
@@ -139,7 +139,7 @@ public class PlayerHelper {
   }
 
   public static void removePlayer(String gameId, String playerId) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     if (game.getBatsman().getId().equals(playerId))
       game.setBatsman(null);
     else if (game.getBowler().getId().equals(playerId))
@@ -147,7 +147,7 @@ public class PlayerHelper {
   }
 
   public static void initPlayers(String gameId) {
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     if (game == null) return;
     initPlayer(game.getBatsman());
     initPlayer(game.getBowler());

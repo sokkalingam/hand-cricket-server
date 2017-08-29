@@ -1,8 +1,8 @@
 package com.project.handcricket.player.helpers;
 
-import com.project.handcricket.data.GameDB;
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.Player;
+import com.project.handcricket.data.GameData;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.Player;
 
 public class PlayerNotificationHelper {
 
@@ -24,7 +24,7 @@ public class PlayerNotificationHelper {
   public static String getOutMsg(String gameId, String playerId) {
     Player currentPlayer = PlayerHelper.getPlayer(gameId, playerId);
     Player otherPlayer = PlayerHelper.getOtherPlayer(gameId, playerId);
-    Game game = GameDB.getInstance().getGame(gameId);
+    Game game = GameData.getInstance().getGame(gameId);
     if (currentPlayer.getId().equals(game.getBatsman().getId()))
       return "You got OUT";
     else

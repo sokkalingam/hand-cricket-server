@@ -1,6 +1,4 @@
-package com.project.handcricket.models;
-
-import java.util.Date;
+package com.project.handcricket.model;
 
 public class GameView {
 

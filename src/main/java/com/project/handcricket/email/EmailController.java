@@ -1,6 +1,6 @@
 package com.project.handcricket.email;
 
-import com.project.handcricket.models.Email;
+import com.project.handcricket.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,8 +1,8 @@
 package com.project.handcricket.game.manage;
 
-import com.project.handcricket.data.GameDB;
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.GameView;
+import com.project.handcricket.data.GameData;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.GameView;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class GameManageService {
 
   public List<GameView> getGames() {
-    Map<String, Game> gameMap = GameDB.getInstance().getGameMap();
+    Map<String, Game> gameMap = GameData.getInstance().getGameMap();
     List<GameView> games = new ArrayList<GameView>();
 
     Iterator<Game> iterator = gameMap.values().iterator();

@@ -1,10 +1,10 @@
 package com.project.handcricket.game.setup;
 
-import com.project.handcricket.data.GameDB;
+import com.project.handcricket.data.GameData;
 import com.project.handcricket.enums.GameStatus;
 import com.project.handcricket.game.play.GamePlayService;
-import com.project.handcricket.models.Game;
-import com.project.handcricket.models.Player;
+import com.project.handcricket.model.Game;
+import com.project.handcricket.model.Player;
 import com.project.handcricket.player.helpers.PlayerHelper;
 import com.project.handcricket.player.services.PlayerNotificationService;
 import com.project.handcricket.socket.SocketService;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameSetupService {
 
-  private GameDB gameDB;
+  private GameData gameData;
   private GamePlayService gamePlayService;
   private SimpMessagingTemplate template;
   private SocketService socketService;
@@ -25,7 +25,7 @@ public class GameSetupService {
                           PlayerNotificationService playerNotificationService,
                           SimpMessagingTemplate template,
                           SocketService socketService) {
-    gameDB = GameDB.getInstance();
+    gameData = GameData.getInstance();
     this.gamePlayService = gamePlayService;
     this.template = template;
     this.socketService = socketService;
@@ -33,7 +33,7 @@ public class GameSetupService {
 
   public Game getNewGame() {
     Game game = new Game();
-    gameDB.addGame(game);
+    gameData.addGame(game);
     return game;
   }
 
@@ -45,7 +45,7 @@ public class GameSetupService {
 
   public Game joinGame(String gameId, Player player) {
     if (gameId == null) return null;
-    Game game = gameDB.getGame(gameId.toUpperCase());
+    Game game = gameData.getGame(gameId.toUpperCase());
     if (game == null) return null;
     if (!isGameOpenToPlay(game)) return null;
     processJoin(game, player);

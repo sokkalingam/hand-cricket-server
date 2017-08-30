@@ -1,20 +1,24 @@
 package com.project.handcricket.mongodb.model;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
+import org.springframework.data.annotation.Id;
 
 public class DataRefresh {
 
-  private Date playerStatsLastRefreshed;
+  @Id
+  private String _id;
+
+  private LocalDate playerStatsDate;
 
   public DataRefresh() {
-    this.playerStatsLastRefreshed = new Date();
+    this.playerStatsDate = new LocalDate();
   }
 
-  public Date getPlayerStatsLastRefreshed() {
-    return playerStatsLastRefreshed;
+  public LocalDate getPlayerStatsDate() {
+    return playerStatsDate;
   }
 
-  public void setPlayerStatsLastRefreshed(Date playerStatsLastRefreshed) {
-    this.playerStatsLastRefreshed = playerStatsLastRefreshed;
+  public void setPlayerStatsDate(LocalDate playerStatsDate) {
+    this.playerStatsDate = playerStatsDate;
   }
 }

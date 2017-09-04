@@ -2,17 +2,12 @@ package com.project.handcricket.stats;
 
 import com.project.handcricket.datarefresh.DataRefreshService;
 import com.project.handcricket.model.Player;
-import com.project.handcricket.mongodb.model.DataRefresh;
 import com.project.handcricket.mongodb.model.PlayerRun;
 import com.project.handcricket.mongodb.model.PlayerWin;
-import com.project.handcricket.mongodb.repo.DataRefreshRepo;
 import com.project.handcricket.mongodb.repo.PlayerRunsRepo;
 import com.project.handcricket.mongodb.repo.PlayerWinsRepo;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PlayerStatsService {
@@ -36,37 +31,53 @@ public class PlayerStatsService {
   }
 
   public void deleteAll() {
+    this.playerRunsRepoDeleteAll();
+    this.playerWinsRepoDeleteAll();
+  }
+
+  public synchronized void playerRunsRepoDeleteAll() {
     this.playerRunsRepo.deleteAll();
+  }
+
+  public synchronized void playerWinsRepoDeleteAll() {
     this.playerWinsRepo.deleteAll();
   }
 
-  public PlayerRun getPlayerWithMaxRuns() {
-    dataRefresh();
+  public synchronized PlayerRun getPlayerWithMaxRuns() {
     return this.playerRunsRepo.findTopByOrderByRunsDesc();
   }
 
-  public PlayerWin getPlayerWithMaxWins() {
-    dataRefresh();
+  public synchronized PlayerWin getPlayerWithMaxWins() {
     return this.playerWinsRepo.findTopByOrderByWinsDesc();
   }
 
+  public synchronized void writePlayerWin(PlayerWin playerWin) {
+    this.playerWinsRepo.save(playerWin);
+  }
+
+  public synchronized void writePlayerRun(PlayerRun playerRun) {
+    this.playerRunsRepo.save(playerRun);
+  }
+
   public boolean updateTopRunsPlayer(Player player) {
+    dataRefresh();
     PlayerRun playerWithMaxRuns = getPlayerWithMaxRuns();
     if (playerWithMaxRuns == null || playerWithMaxRuns.getRuns() == null || player.getRuns() > playerWithMaxRuns.getRuns()) {
       if (playerWithMaxRuns != null && playerWithMaxRuns.getRuns() != null && player.getRuns() > playerWithMaxRuns.getRuns())
-        this.playerRunsRepo.deleteAll();
-      this.playerRunsRepo.save(new PlayerRun(player.getName(), player.getRuns()));
+        playerRunsRepoDeleteAll();
+      writePlayerRun(new PlayerRun(player.getName(), player.getRuns()));
       return true;
     }
     return false;
   }
 
   public boolean updateTopWinsPlayer(Player player) {
+    dataRefresh();
     PlayerWin playerWithMaxWins = getPlayerWithMaxWins();
     if (playerWithMaxWins == null || playerWithMaxWins.getWins() == null || player.getWins() > playerWithMaxWins.getWins()) {
       if (playerWithMaxWins != null && playerWithMaxWins.getWins() != null && player.getWins() > playerWithMaxWins.getWins())
-        this.playerWinsRepo.deleteAll();
-      this.playerWinsRepo.save(new PlayerWin(player.getName(), player.getWins()));
+        playerWinsRepoDeleteAll();
+      writePlayerWin(new PlayerWin(player.getName(), player.getWins()));
       return true;
     }
     return false;

@@ -14,34 +14,39 @@ public class DataRefreshService {
   @Autowired
   private DataRefreshRepo dataRefreshRepo;
 
-  public List<DataRefresh> getAll() {
+  public synchronized List<DataRefresh> getAll() {
     return this.dataRefreshRepo.findAll();
   }
 
-  public DataRefresh getLatest() {
+  public synchronized DataRefresh getLatest() {
     return this.dataRefreshRepo.findTopByOrderByPlayerStatsDate();
   }
 
-  public String deleteAll() {
+  public synchronized void deleteAll() {
     this.dataRefreshRepo.deleteAll();
-    return "Deleted";
+  }
+
+  public synchronized void write(DataRefresh dataRefresh) {
+    this.dataRefreshRepo.save(dataRefresh);
   }
 
   public boolean refreshData() {
-    DataRefresh dataRefresh = this.dataRefreshRepo.findTopByOrderByPlayerStatsDate();
+
+    DataRefresh dataRefresh = getLatest();
 
     if (dataRefresh == null || dataRefresh.getPlayerStatsDate() == null) {
-      this.dataRefreshRepo.save(new DataRefresh());
+      write(new DataRefresh());
       return false;
     }
 
     LocalDate today = new LocalDate();
     if (today.compareTo(dataRefresh.getPlayerStatsDate()) > 0) {
-      this.dataRefreshRepo.deleteAll();
-      this.dataRefreshRepo.save(new DataRefresh());
+      deleteAll();
+      write(new DataRefresh());
       return true;
     }
 
     return false;
   }
+
 }

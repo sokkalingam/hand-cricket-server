@@ -28,11 +28,13 @@ public class PlayerStatsController {
 
   @RequestMapping("/maxRuns")
   public Player maxRuns() {
+    playerStatsService.dataRefresh();
     return playerStatsService.getPlayerWithMaxRuns();
   }
 
   @RequestMapping("/maxWins")
   public Player maxWins() {
+    playerStatsService.dataRefresh();
     return playerStatsService.getPlayerWithMaxWins();
   }
 

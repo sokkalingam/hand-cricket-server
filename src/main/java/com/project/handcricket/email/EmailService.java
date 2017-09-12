@@ -1,6 +1,8 @@
 package com.project.handcricket.email;
 
 import com.project.handcricket.model.Email;
+import com.project.handcricket.model.Player;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,12 +18,27 @@ public class EmailService {
     this.javaMailSender = javaMailSender;
   }
 
-  public void sendMail(Email email) {
-    SimpleMailMessage mailMessage = new SimpleMailMessage();
-    mailMessage.setTo("handcricketgame@gmail.com");
-    mailMessage.setSubject("User Feedback");
-    mailMessage.setText(email.toString());
-    mailMessage.setFrom("Feedback");
-    javaMailSender.send(mailMessage);
+  public void sendMail(SimpleMailMessage simpleMailMessage) {
+    if (simpleMailMessage.getTo().length > 0
+        && EmailValidator.getInstance().isValid(simpleMailMessage.getTo()[0]))
+      javaMailSender.send(simpleMailMessage);
+  }
+
+  public void sendFeedbackEmail(Email email) {
+    sendMail(EmailHelper.getFeedbackEmail(email));
+  }
+
+  public synchronized void sendHighScore(Player topScorer, Player currentPlayer) {
+    if (currentPlayer.getEmail() == null) return;
+    if ((topScorer.getEmail() == null) ||
+        (topScorer.getEmail() != null && !currentPlayer.getEmail().equals(topScorer.getEmail())))
+      sendMail(EmailHelper.getHighScoreEmail(topScorer, currentPlayer));
+  }
+
+  public synchronized void sendHighWins(Player topScorer, Player currentPlayer) {
+    if (currentPlayer.getEmail() == null) return;
+    if ((topScorer.getEmail() == null) ||
+        (topScorer.getEmail() != null && !currentPlayer.getEmail().equals(topScorer.getEmail())))
+      sendMail(EmailHelper.getHighWinsEmail(topScorer, currentPlayer));
   }
 }

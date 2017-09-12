@@ -16,6 +16,7 @@ public class Player {
   private PlayerStatus status;
   private PlayerType type;
   private Integer wins;
+  private String email;
 
   public Player() {
     this.id = Helper.getRandomID(5);
@@ -100,4 +101,11 @@ public class Player {
     this.wins = wins;
   }
 
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }

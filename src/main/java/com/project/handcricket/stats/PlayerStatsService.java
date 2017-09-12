@@ -1,6 +1,7 @@
 package com.project.handcricket.stats;
 
 import com.project.handcricket.datarefresh.DataRefreshService;
+import com.project.handcricket.email.EmailService;
 import com.project.handcricket.model.Player;
 import com.project.handcricket.mongodb.model.PlayerRun;
 import com.project.handcricket.mongodb.model.PlayerWin;
@@ -16,13 +17,15 @@ public class PlayerStatsService {
   private PlayerWinsRepo playerWinsRepo;
 
   private DataRefreshService dataRefreshService;
+  private EmailService emailService;
 
   @Autowired
   public PlayerStatsService(PlayerRunsRepo playerRunsRepo, PlayerWinsRepo playerWinsRepo,
-                            DataRefreshService dataRefreshService) {
+                            DataRefreshService dataRefreshService, EmailService emailService) {
     this.playerRunsRepo = playerRunsRepo;
     this.playerWinsRepo = playerWinsRepo;
     this.dataRefreshService = dataRefreshService;
+    this.emailService = emailService;
   }
 
   public void dataRefresh() {
@@ -64,7 +67,8 @@ public class PlayerStatsService {
     if (playerWithMaxRuns == null || playerWithMaxRuns.getRuns() == null || player.getRuns() > playerWithMaxRuns.getRuns()) {
       if (playerWithMaxRuns != null && playerWithMaxRuns.getRuns() != null && player.getRuns() > playerWithMaxRuns.getRuns())
         playerRunsRepoDeleteAll();
-      writePlayerRun(new PlayerRun(player.getName(), player.getRuns()));
+      writePlayerRun(new PlayerRun(player.getName(), player.getRuns(), player.getEmail()));
+      emailService.sendHighScore(player, playerWithMaxRuns);
       return true;
     }
     return false;
@@ -75,7 +79,8 @@ public class PlayerStatsService {
     if (playerWithMaxWins == null || playerWithMaxWins.getWins() == null || player.getWins() > playerWithMaxWins.getWins()) {
       if (playerWithMaxWins != null && playerWithMaxWins.getWins() != null && player.getWins() > playerWithMaxWins.getWins())
         playerWinsRepoDeleteAll();
-      writePlayerWin(new PlayerWin(player.getName(), player.getWins()));
+      writePlayerWin(new PlayerWin(player.getName(), player.getWins(), player.getEmail()));
+      emailService.sendHighWins(player, playerWithMaxWins);
       return true;
     }
     return false;

@@ -8,9 +8,10 @@ public class PlayerWin extends Player {
   @Id
   private String _id;
 
-  public PlayerWin(String name, Integer wins) {
+  public PlayerWin(String name, Integer wins, String email) {
     setName(name);
     setWins(wins);
+    setEmail(email);
   }
 
 }

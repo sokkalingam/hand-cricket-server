@@ -8,9 +8,10 @@ public class PlayerRun extends Player {
   @Id
   private String _id;
 
-  public PlayerRun(String name, Integer runs) {
+  public PlayerRun(String name, Integer runs, String email) {
     setName(name);
     setRuns(runs);
+    setEmail(email);
   }
 
 }

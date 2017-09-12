@@ -16,7 +16,7 @@ public class EmailController {
 
   @RequestMapping(method = RequestMethod.POST, value = "/feedback")
   public String sendEmail(@RequestBody Email email) {
-    emailService.sendMail(email);
+    emailService.sendFeedbackEmail(email);
     return "Email Sent";
   }
 

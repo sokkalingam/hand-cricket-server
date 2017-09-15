@@ -12,7 +12,6 @@ public class EmailHelper {
     mailMessage.setTo("handcricketgame@gmail.com");
     mailMessage.setSubject("User Feedback");
     mailMessage.setText(email.toString());
-    mailMessage.setFrom("Feedback");
     return mailMessage;
   }
 
@@ -23,7 +22,6 @@ public class EmailHelper {
     mailMessage.setText(topScorer.getName() + " scored " + topScorer.getRuns() +
         " and beat your score of " + currentPlayer.getRuns() + " runs\n\n" +
         "Go to www.handcricketgame.com to play and set your new high score");
-    mailMessage.setFrom("HandCricketAdmin");
     return mailMessage;
   }
 
@@ -34,7 +32,6 @@ public class EmailHelper {
     mailMessage.setText(topScorer.getName() + " won " + topScorer.getWins() +
         " times and beat your " + currentPlayer.getWins() + " wins\n\n" +
         "Go to www.handcricketgame.com to play and set your new high score");
-    mailMessage.setFrom("HandCricketAdmin");
     return mailMessage;
   }
 

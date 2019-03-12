@@ -2,26 +2,41 @@ package com.project.handcricket.email;
 
 import com.project.handcricket.model.Email;
 import com.project.handcricket.model.Player;
+import com.project.handcricket.services.EncryptDecryptService;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 @Service
 public class EmailService {
 
-  private JavaMailSender javaMailSender;
+  private JavaMailSenderImpl javaMailSender;
+
+  @Value("${spring.mail.username}")
+  private String email;
+
+  @Value("${spring.mail.password}")
+  private String password;
+
+  private EncryptDecryptService encryptDecryptService;
 
   @Autowired
-  public EmailService(JavaMailSender javaMailSender) {
+  public EmailService(JavaMailSenderImpl javaMailSender, EncryptDecryptService encryptDecryptService) {
     this.javaMailSender = javaMailSender;
+    this.encryptDecryptService = encryptDecryptService;
   }
 
   public void sendMail(SimpleMailMessage simpleMailMessage) {
     if (simpleMailMessage.getTo().length > 0
-        && EmailValidator.getInstance().isValid(simpleMailMessage.getTo()[0]))
-      javaMailSender.send(simpleMailMessage);
+        && EmailValidator.getInstance().isValid(simpleMailMessage.getTo()[0])) {
+        javaMailSender.setUsername(encryptDecryptService.decrypt(email));
+        javaMailSender.setPassword(encryptDecryptService.decrypt(password));
+        javaMailSender.send(simpleMailMessage);
+    }
   }
 
   public void sendFeedbackEmail(Email email) {

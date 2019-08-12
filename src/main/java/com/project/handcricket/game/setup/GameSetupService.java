@@ -33,6 +33,9 @@ public class GameSetupService {
 
   public Game getNewGame() {
     Game game = new Game();
+    while (gameData.hasGame(game.getId())) {
+      game = new Game();
+    }
     gameData.addGame(game);
     return game;
   }

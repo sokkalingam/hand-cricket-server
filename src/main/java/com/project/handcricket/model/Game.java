@@ -16,7 +16,7 @@ public class Game {
   private boolean connected;
 
   public Game() {
-    this.id = Helper.getRandomID(5);
+    this.id = Helper.getRandomID(6);
     this.touch();
     this.gameStatus = GameStatus.NOT_STARTED;
   }

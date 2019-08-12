@@ -2,6 +2,7 @@ package com.project.handcricket.data;
 
 import com.project.handcricket.model.Game;
 import com.project.handcricket.model.GameAndPlayer;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,10 @@ public class GameData {
   public void addGame(Game game) {
     if (game == null) return;
     gameMap.put(game.getId(), game);
+  }
+
+  public boolean hasGame(String gameId) {
+    return StringUtils.isNotBlank(gameId) && gameMap.containsKey(gameId);
   }
 
   public Game getGame(String gameId) {
